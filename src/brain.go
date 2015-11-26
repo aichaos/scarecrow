@@ -2,10 +2,10 @@ package scarecrow
 
 import (
 	"fmt"
+	rivescript "github.com/aichaos/rivescript-go"
 	"os"
 	"regexp"
 	"time"
-	rivescript "github.com/aichaos/rivescript-go"
 )
 
 var re_nasties = regexp.MustCompile(`[^A-Za-z0-9_\-@ ]`)

@@ -19,7 +19,7 @@ type Scarecrow struct {
 
 	// Internal structures.
 	BotsConfig types.BotsConfig
-	Brain *rivescript.RiveScript
+	Brain      *rivescript.RiveScript
 
 	// Listeners.
 	SlackListeners   []*slack.SlackListener

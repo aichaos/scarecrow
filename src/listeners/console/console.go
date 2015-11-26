@@ -2,8 +2,8 @@ package console
 
 import (
 	"fmt"
-	"github.com/jprichardson/readline-go"
 	"github.com/aichaos/scarecrow/src/types"
+	"github.com/jprichardson/readline-go"
 	"os"
 )
 

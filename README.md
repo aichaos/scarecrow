@@ -18,6 +18,22 @@ remembers information about the people it chats with, keeps log files, etc.
   multiple instances of Slack bots from one program.
 * Chat with the bot on the console, too
 
+# Install and Build
+
+I don't have Godep set up, so install the dependencies manually for now.
+
+```bash
+go get github.com/nlopes/slack               # commit 9153359e4c6e3dd6
+go get github.com/jprichardson/readline-go   # commit 69d39989b17ebcfb
+```
+
+Build it with `make build`
+
+Run it with `./scarecrow`
+
+Command line options are pretty basic: `--debug` for debug mode and
+`--version` to get the version number.
+
 # Configuration
 
 The bot is configured through JSON files in the `config` folder. You'll have to

@@ -8,8 +8,8 @@ package types
 // ReplyRequest is a channel for a listener requesting a response for a user.
 type ReplyRequest struct {
 	BotUsername string
-	Username string
-	Message  string
+	Username    string
+	Message     string
 }
 
 // ReplyAnswer is an outgoing message to a listener to send to a user.
@@ -53,6 +53,6 @@ type ListenerConfig struct {
 /********************************/
 
 type UservarsConfig struct {
-	Username string `json:"username"`
-	Data map[string]string `json:"data"`
+	Username string            `json:"username"`
+	Data     map[string]string `json:"data"`
 }
