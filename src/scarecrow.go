@@ -2,8 +2,10 @@ package scarecrow
 
 import (
 	rivescript "github.com/aichaos/rivescript-go"
+	"github.com/kirsle/scarecrow/src/listeners/console"
 	"github.com/kirsle/scarecrow/src/listeners/slack"
 	"github.com/kirsle/scarecrow/src/types"
+	"time"
 )
 
 const (
@@ -17,13 +19,11 @@ type Scarecrow struct {
 
 	// Internal structures.
 	BotsConfig types.BotsConfig
+	Brain *rivescript.RiveScript
 
 	// Listeners.
-	SlackListeners []*slack.SlackListener
-}
-
-type RiveScriptBot struct {
-	brain *rivescript.RiveScript
+	SlackListeners   []*slack.SlackListener
+	ConsoleListeners []*console.ConsoleListener
 }
 
 func New() *Scarecrow {
@@ -36,25 +36,37 @@ func New() *Scarecrow {
 func (self *Scarecrow) Start() {
 	self.Info("Scarecrow version %s is starting...", VERSION)
 	self.InitConfig()
+	self.InitBrain()
+	MakeDirectory("./users")
 
 	// Go through all the bots and activate them.
-	for _, bot := range self.BotsConfig.Bots {
-		for _, listener := range bot.Listeners {
-			// Skip disabled listeners.
-			if listener.Enabled == false {
-				continue
-			}
+	for _, listener := range self.BotsConfig.Listeners {
+		// Skip disabled listeners.
+		if listener.Enabled == false {
+			continue
+		}
 
-			// Initialize the various listener types.
-			if listener.Type == "Slack" {
-				request := make(chan types.ReplyRequest)
-				response := make(chan types.ReplyAnswer)
-				go self.ManageRequestChannel(request, response)
+		// Initialize the various listener types.
+		if listener.Type == "Console" {
+			self.Info("Setting up Console listener...")
+			request := make(chan types.ReplyRequest)
+			response := make(chan types.ReplyAnswer)
+			go self.ManageRequestChannel(request, response)
 
-				obj := slack.New(listener, request, response)
-				obj.Start()
-				self.SlackListeners = append(self.SlackListeners, obj)
-			}
+			obj := console.New(listener, request, response)
+			obj.Start()
+			self.ConsoleListeners = append(self.ConsoleListeners, obj)
+		} else if listener.Type == "Slack" {
+			self.Info("Setting up Slack listener...")
+			request := make(chan types.ReplyRequest)
+			response := make(chan types.ReplyAnswer)
+			go self.ManageRequestChannel(request, response)
+
+			obj := slack.New(listener, request, response)
+			obj.Start()
+			self.SlackListeners = append(self.SlackListeners, obj)
+		} else {
+			self.Warn("Unknown listener type %s", listener.Type)
 		}
 	}
 
@@ -64,10 +76,7 @@ func (self *Scarecrow) Start() {
 // Run enters the main loop.
 func (self *Scarecrow) Run() {
 	for {
-		// Ping the Slack bots.
-		for _, bot := range self.SlackListeners {
-			bot.DoOneLoop()
-		}
+		time.Sleep(time.Second)
 	}
 }
 
@@ -79,12 +88,13 @@ func (self *Scarecrow) ManageRequestChannel(request chan types.ReplyRequest,
 		select {
 		case message := <-request:
 			self.Log("Got reply request from %s: %s", message.Username, message.Message)
+			reply := self.GetReply(message.BotUsername, message.Username, message.Message)
 
 			// Prepare an answer.
-			reply := types.ReplyAnswer{}
-			reply.Username = message.Username
-			reply.Message = message.Message
-			answer <- reply
+			outgoing := types.ReplyAnswer{}
+			outgoing.Username = message.Username
+			outgoing.Message = reply
+			answer <- outgoing
 		}
 	}
 }

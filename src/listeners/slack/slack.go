@@ -47,6 +47,13 @@ func New(config types.ListenerConfig, request chan types.ReplyRequest,
 func (self *SlackListener) Start() {
 	self.rtm = self.api.NewRTM()
 	go self.rtm.ManageConnection()
+	go self.MainLoop()
+}
+
+func (self *SlackListener) MainLoop() {
+	for {
+		self.DoOneLoop()
+	}
 }
 
 func (self *SlackListener) DoOneLoop() {
@@ -60,7 +67,6 @@ func (self *SlackListener) DoOneLoop() {
 			self.OnConnected(ev)
 
 		case *slackclient.MessageEvent:
-			fmt.Printf("Message: %v\n", ev)
 			self.OnMessage(ev)
 
 		case *slackclient.RTMError:
@@ -95,7 +101,6 @@ func (self *SlackListener) OnMessage(ev *slackclient.MessageEvent) {
 	userId := msg.User
 	userName := self.userId2Name[userId]
 	text := msg.Text
-	fmt.Printf("[%s] %s\n", userName, text)
 
 	// Store the user ID->channel ID map.
 	self.userChannelMap[userId] = channelId
@@ -120,6 +125,7 @@ func (self *SlackListener) OnMessage(ev *slackclient.MessageEvent) {
 	// Send a request for a response.
 	if willAnswer {
 		request := types.ReplyRequest{}
+		request.BotUsername = self.botUsername
 		request.Username = userName
 		request.Message = text
 		self.requestChannel <- request

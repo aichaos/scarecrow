@@ -7,6 +7,7 @@ package types
 
 // ReplyRequest is a channel for a listener requesting a response for a user.
 type ReplyRequest struct {
+	BotUsername string
 	Username string
 	Message  string
 }
@@ -26,13 +27,13 @@ type ReplyAnswer struct {
 /****************************/
 
 type BotsConfig struct {
-	Bots []BotConfig
+	Personality PersonalityConfig `json:"personality"`
+	Listeners   []ListenerConfig  `json:"listeners"`
 }
 
-type BotConfig struct {
-	Name      string           `json:"name"`
-	Brain     BrainConfig      `json:"brain"`
-	Listeners []ListenerConfig `json:"listeners"`
+type PersonalityConfig struct {
+	Name  string      `json:"name"`
+	Brain BrainConfig `json:"brain"`
 }
 
 type BrainConfig struct {
@@ -45,4 +46,13 @@ type ListenerConfig struct {
 	APIToken string `json:"api_token"`
 	Enabled  bool   `json:"enabled"`
 	Username string `json:"username"`
+}
+
+/********************************/
+/***** RiveScript User Data *****/
+/********************************/
+
+type UservarsConfig struct {
+	Username string `json:"username"`
+	Data map[string]string `json:"data"`
 }

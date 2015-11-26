@@ -16,5 +16,4 @@ type Listener interface {
 	Name() string
 	New(types.ListenerConfig) *Listener
 	Start()
-	DoOneLoop()
 }
