@@ -3,7 +3,7 @@ package scarecrow
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/kirsle/scarecrow/src/types"
+	"github.com/aichaos/scarecrow/src/types"
 	"os"
 )
 

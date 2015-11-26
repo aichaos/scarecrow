@@ -5,7 +5,7 @@ Scarecrow chatbot.
 package listeners
 
 import (
-	"github.com/kirsle/scarecrow/src/types"
+	"github.com/aichaos/scarecrow/src/types"
 )
 
 // TODO: the interface stuff isn't done properly, but until it is you can refer

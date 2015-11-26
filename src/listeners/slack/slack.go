@@ -2,7 +2,7 @@ package slack
 
 import (
 	"fmt"
-	"github.com/kirsle/scarecrow/src/types"
+	"github.com/aichaos/scarecrow/src/types"
 	slackclient "github.com/nlopes/slack"
 	"strings"
 )

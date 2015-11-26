@@ -6,7 +6,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	scarecrow "github.com/kirsle/scarecrow/src"
+	scarecrow "github.com/aichaos/scarecrow/src"
 	"os"
 )
 
