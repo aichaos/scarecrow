@@ -119,6 +119,7 @@ func (self *SlackListener) OnMessage(ev *slackclient.MessageEvent) {
 			willAnswer = true
 			text = strings.Replace(text, self.botUsername, "", 1)
 			text = strings.Replace(text, atMention, "", -1)
+			text = strings.Trim(text, ":")
 		}
 	}
 

@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"time"
+	"strings"
 )
 
 var re_nasties = regexp.MustCompile(`[^A-Za-z0-9_\-@ ]`)
@@ -19,6 +20,7 @@ func (self *Scarecrow) InitBrain() {
 
 // GetReply actually gets a response for a user.
 func (self *Scarecrow) GetReply(botUsername, username, message string) string {
+	message = strings.Trim(message, " ")
 	// Path to the user's persisted profile data.
 	safeUsername := re_nasties.ReplaceAllString(username, "_")
 	profile := fmt.Sprintf("./users/%s.json", safeUsername)
