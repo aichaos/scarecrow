@@ -1,0 +1,22 @@
+{
+	"personality": {
+		"name": "Scarecrow",
+		"brain": {
+			"backend": "RiveScript",
+			"replies": "./replies/standard"
+		}
+	},
+	"listeners": [
+		{
+			"type": "Slack",
+			"enabled": false,
+			"api_token": "XXXX-NOT-A-REAL-TOKEN-XXXX",
+			"username": "scarecrow"
+		},
+		{
+			"type": "Console",
+			"enabled": true,
+			"username": "Scarecrow"
+		}
+	]
+}
