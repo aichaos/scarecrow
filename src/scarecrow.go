@@ -5,6 +5,7 @@ import (
 	"github.com/aichaos/scarecrow/src/listeners/console"
 	"github.com/aichaos/scarecrow/src/listeners/slack"
 	"github.com/aichaos/scarecrow/src/types"
+	"strings"
 	"time"
 )
 
@@ -88,7 +89,17 @@ func (self *Scarecrow) ManageRequestChannel(request chan types.ReplyRequest,
 		select {
 		case message := <-request:
 			self.Log("Got reply request from %s: %s", message.Username, message.Message)
-			reply := self.GetReply(message.BotUsername, message.Username, message.Message)
+
+			input := strings.Trim(message.Message, " ")
+			var reply string
+
+			// Handle commands (TODO: admin rights and such)
+			if strings.Index(input, "!reload") == 0 {
+				self.InitBrain()
+				reply = "Brain reloaded!"
+			} else {
+				reply = self.GetReply(message.BotUsername, message.Username, message.Message)
+			}
 
 			// Prepare an answer.
 			outgoing := types.ReplyAnswer{}
