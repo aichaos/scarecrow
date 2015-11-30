@@ -3,8 +3,8 @@
 	"GoVersion": "go1.5.1",
 	"Packages": [
 		"./",
-		"./listeners/slack",
-		"./listeners/console"
+		"./listeners/console",
+		"./listeners/slack"
 	],
 	"Deps": [
 		{
@@ -19,6 +19,10 @@
 			"ImportPath": "github.com/nlopes/slack",
 			"Comment": "v0.0.1-69-g9153359",
 			"Rev": "9153359e4c6e3dd6fecd68332164321b5efd543f"
+		},
+		{
+			"ImportPath": "golang.org/x/net/websocket",
+			"Rev": "62ac18b461605b4be188bbc7300e9aa2bc836cd4"
 		}
 	]
 }

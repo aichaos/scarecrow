@@ -6,3 +6,6 @@ build:
 
 format:
 	gofmt -w .
+
+save-deps:
+	godep save -r ./ ./listeners/console ./listeners/slack
