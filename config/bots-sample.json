@@ -10,13 +10,17 @@
 		{
 			"type": "Slack",
 			"enabled": false,
-			"api_token": "XXXX-NOT-A-REAL-TOKEN-XXXX",
-			"username": "scarecrow"
+			"settings": {
+				"api_token": "XXX-SLACK-API-TOKEN-XXX",
+				"username": "scarecrow"
+			}
 		},
 		{
 			"type": "Console",
 			"enabled": true,
-			"username": "Scarecrow"
+			"settings": {
+				"username": "Scarecrow"
+			}
 		}
 	]
 }

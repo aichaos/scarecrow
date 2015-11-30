@@ -62,15 +62,19 @@ Here is an abridged version (with comments) of the config file:
     {
       "type": "Slack",   // Each Listener has a type
       "enabled": false,  // Set to `true` to enable this listener on start-up
-      "api_token": "XXXX-NOT-A-REAL-TOKEN-XXXX", // Slack Bot API token
-      "username": "scarecrow" // Enter the Slack bot's real username here
+      "settings": {      // Listener-specific configuration
+          "api_token": "XXXX-NOT-A-REAL-TOKEN-XXXX", // Slack Bot API token
+          "username": "scarecrow" // Enter the Slack bot's real username here
+      }
     },
     {
       "type": "Console",
       "enabled": true,
-      "username": "Scarecrow" // This username is shown in the console when the
-                              // bot sends you a reply. It can be anything you
-                              // want.
+      "settings": {
+          "username": "Scarecrow" // This username is shown in the console when
+                                  // the bot sends you a reply. It can be
+                                  // anything you want.
+      }
     }
   ]
 }
