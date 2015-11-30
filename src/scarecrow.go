@@ -2,8 +2,7 @@ package scarecrow
 
 import (
 	rivescript "github.com/aichaos/rivescript-go"
-	"github.com/aichaos/scarecrow/src/listeners/console"
-	"github.com/aichaos/scarecrow/src/listeners/slack"
+	"github.com/aichaos/scarecrow/src/listeners"
 	"github.com/aichaos/scarecrow/src/types"
 	"strings"
 	"time"
@@ -23,8 +22,7 @@ type Scarecrow struct {
 	Brain      *rivescript.RiveScript
 
 	// Listeners.
-	SlackListeners   []*slack.SlackListener
-	ConsoleListeners []*console.ConsoleListener
+	Listeners []listeners.Listener
 }
 
 func New() *Scarecrow {
@@ -48,27 +46,19 @@ func (self *Scarecrow) Start() {
 		}
 
 		// Initialize the various listener types.
-		if listener.Type == "Console" {
-			self.Info("Setting up Console listener...")
-			request := make(chan types.ReplyRequest)
-			response := make(chan types.ReplyAnswer)
-			go self.ManageRequestChannel(request, response)
+		self.Info("Setting up %s listener...", listener.Type)
+		request := make(chan types.ReplyRequest)
+		response := make(chan types.ReplyAnswer)
+		go self.ManageRequestChannel(request, response)
 
-			obj := console.New(listener, request, response)
-			obj.Start()
-			self.ConsoleListeners = append(self.ConsoleListeners, obj)
-		} else if listener.Type == "Slack" {
-			self.Info("Setting up Slack listener...")
-			request := make(chan types.ReplyRequest)
-			response := make(chan types.ReplyAnswer)
-			go self.ManageRequestChannel(request, response)
-
-			obj := slack.New(listener, request, response)
-			obj.Start()
-			self.SlackListeners = append(self.SlackListeners, obj)
-		} else {
-			self.Warn("Unknown listener type %s", listener.Type)
+		constructor, err := listeners.Create(listener.Type, listener, request, response)
+		if err != nil {
+			self.Error("Unknown listener type: %s", listener.Type)
+			continue
 		}
+
+		constructor.Start()
+		self.Listeners = append(self.Listeners, constructor)
 	}
 
 	self.Run()
