@@ -63,8 +63,8 @@ func (self XMPPListener) New(config types.ListenerConfig, request chan types.Rep
 		Debug:         debug,
 		Session:       true, // Use server session
 		NoTLS:         tlsDisable,
-		Status:        "xa",
-		StatusMessage: "test status",
+		// Status:        "xa",
+		// StatusMessage: "test status",
 	}
 
 	return listener
@@ -93,9 +93,11 @@ func (self *XMPPListener) XMPPLoop() {
 
 		switch v := chat.(type) {
 		case xmppclient.Chat:
-			self.OnMessage(v.Remote, v.Text)
+			self.OnMessage(v)
 		case xmppclient.Presence:
-			fmt.Printf("PRESENCE: [%s] %s\n", v.From, v.Show)
+			self.OnPresence(v)
+		default:
+			fmt.Printf("Unhandled XMPP event of type %s\n", v)
 		}
 	}
 }
@@ -109,14 +111,37 @@ func (self *XMPPListener) AnswerLoop() {
 }
 
 // OnMessage handles an incoming chat message from a user.
-func (self *XMPPListener) OnMessage(username string, message string) {
-	message = strings.Trim(message, " ")
+func (self *XMPPListener) OnMessage(v xmppclient.Chat) {
+	username := v.Remote
+	message := strings.Trim(v.Text, " ")
+
+	// Remove the user's Resource from their username.
+	if strings.Index(username, "/") > -1 {
+		username = strings.Split(username, "/")[0]
+	}
+
 	if len(message) > 0 {
 		request := types.ReplyRequest{}
 		request.BotUsername = self.username
 		request.Username = username
 		request.Message = message
 		self.requestChannel <- request
+	}
+}
+
+// OnPresence handles incoming presence notifications, including add requests.
+func (self *XMPPListener) OnPresence(v xmppclient.Presence) {
+	username := v.From
+
+	// Remove the user's Resource from their username.
+	if strings.Index(username, "/") > -1 {
+		username = strings.Split(username, "/")[0]
+	}
+
+	// Handle presence types.
+	if v.Type == "subscribe" {
+		fmt.Printf("Subscribed by: %s\n", username)
+		self.client.ApproveSubscription(username)
 	}
 }
 
