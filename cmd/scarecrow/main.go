@@ -6,8 +6,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	scarecrow "github.com/aichaos/scarecrow/src"
 	"os"
+	scarecrow "github.com/aichaos/scarecrow/src"
+	_ "github.com/aichaos/scarecrow/src/listeners/console"
+	_ "github.com/aichaos/scarecrow/src/listeners/slack"
 )
 
 func main() {

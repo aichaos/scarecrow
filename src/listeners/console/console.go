@@ -2,9 +2,10 @@ package console
 
 import (
 	"fmt"
-	"github.com/aichaos/scarecrow/src/types"
-	"github.com/jprichardson/readline-go"
 	"os"
+	"github.com/jprichardson/readline-go"
+	"github.com/aichaos/scarecrow/src/types"
+	"github.com/aichaos/scarecrow/src/listeners"
 )
 
 type ConsoleListener struct {
@@ -17,9 +18,13 @@ type ConsoleListener struct {
 	readline chan string
 }
 
+func init() {
+	listeners.Register("Console", &ConsoleListener{})
+}
+
 // New creates a new Slack Listener.
-func New(config types.ListenerConfig, request chan types.ReplyRequest,
-	response chan types.ReplyAnswer) *ConsoleListener {
+func (self ConsoleListener) New(config types.ListenerConfig, request chan types.ReplyRequest,
+	response chan types.ReplyAnswer) listeners.Listener {
 	listener := new(ConsoleListener)
 	listener.requestChannel = request
 	listener.answerChannel = response
@@ -29,7 +34,7 @@ func New(config types.ListenerConfig, request chan types.ReplyRequest,
 	return listener
 }
 
-func (self *ConsoleListener) Start() {
+func (self ConsoleListener) Start() {
 	self.readline = make(chan string)
 	go self.ListenToConsole()
 	go self.MainLoop()

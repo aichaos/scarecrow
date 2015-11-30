@@ -2,9 +2,10 @@ package slack
 
 import (
 	"fmt"
-	"github.com/aichaos/scarecrow/src/types"
-	slackclient "github.com/nlopes/slack"
 	"strings"
+	slackclient "github.com/nlopes/slack"
+	"github.com/aichaos/scarecrow/src/types"
+	"github.com/aichaos/scarecrow/src/listeners"
 )
 
 type SlackListener struct {
@@ -25,15 +26,21 @@ type SlackListener struct {
 	userData       map[string]*slackclient.User // Full user details by ID
 }
 
-// New creates a new Slack Listener.
-func New(config types.ListenerConfig, request chan types.ReplyRequest,
-	response chan types.ReplyAnswer) *SlackListener {
-	listener := new(SlackListener)
-	listener.requestChannel = request
-	listener.answerChannel = response
+func init() {
+	listeners.Register("Slack", &SlackListener{})
+}
 
-	listener.apiToken = config.APIToken
-	listener.botUsername = config.Username
+// New creates a new Slack Listener.
+func (self SlackListener) New(config types.ListenerConfig, request chan types.ReplyRequest,
+	response chan types.ReplyAnswer) listeners.Listener {
+	listener := SlackListener{
+		requestChannel: request,
+		answerChannel: response,
+
+		apiToken: config.APIToken,
+		botUsername: config.Username,
+	}
+
 	listener.api = slackclient.New(listener.apiToken)
 
 	listener.userChannelMap = map[string]string{}
@@ -44,7 +51,7 @@ func New(config types.ListenerConfig, request chan types.ReplyRequest,
 	return listener
 }
 
-func (self *SlackListener) Start() {
+func (self SlackListener) Start() {
 	self.rtm = self.api.NewRTM()
 	go self.rtm.ManageConnection()
 	go self.MainLoop()

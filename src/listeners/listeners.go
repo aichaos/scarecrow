@@ -5,6 +5,9 @@ Scarecrow chatbot.
 package listeners
 
 import (
+	"errors"
+	"sort"
+	"sync"
 	"github.com/aichaos/scarecrow/src/types"
 )
 
@@ -12,8 +15,47 @@ import (
 // to the defined interface in this file to see what functions a listener should
 // implement.
 
+// Type Listener is an interface for front-end listeners for Scarecrow.
 type Listener interface {
-	Name() string
-	New(types.ListenerConfig) *Listener
+	New(types.ListenerConfig, chan types.ReplyRequest, chan types.ReplyAnswer) Listener
 	Start()
+}
+
+var (
+	listenersMu sync.RWMutex
+	listeners = make(map[string]Listener)
+)
+
+// Register registers a listener handler.
+func Register(name string, impl Listener) {
+	listenersMu.Lock()
+	defer listenersMu.Unlock()
+	if impl == nil {
+		panic("listeners: Registered listener is nil")
+	}
+	if _, dup := listeners[name]; dup {
+		panic("listeners: Register called twice for listener " + name)
+	}
+	listeners[name] = impl
+}
+
+// Listeners returns a sorted list of the names of the registered listeners.
+func Listeners() []string {
+	listenersMu.RLock()
+	defer listenersMu.RUnlock()
+	var list []string
+	for name := range listeners {
+		list = append(list, name)
+	}
+	sort.Strings(list)
+	return list
+}
+
+func Create(name string, cfg types.ListenerConfig, reply chan types.ReplyRequest, answer chan types.ReplyAnswer) (Listener, error) {
+	if _, ok := listeners[name]; !ok {
+		return nil, errors.New("Unknown listener type.")
+	}
+
+	inst := listeners[name].New(cfg, reply, answer)
+	return inst, nil
 }
