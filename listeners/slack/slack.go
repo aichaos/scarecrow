@@ -2,10 +2,10 @@ package slack
 
 import (
 	"fmt"
-	"strings"
-	slackclient "github.com/nlopes/slack"
-	"github.com/aichaos/scarecrow/types"
+	slackclient "github.com/aichaos/scarecrow/Godeps/_workspace/src/github.com/nlopes/slack"
 	"github.com/aichaos/scarecrow/listeners"
+	"github.com/aichaos/scarecrow/types"
+	"strings"
 )
 
 type SlackListener struct {
@@ -35,9 +35,9 @@ func (self SlackListener) New(config types.ListenerConfig, request chan types.Re
 	response chan types.ReplyAnswer) listeners.Listener {
 	listener := SlackListener{
 		requestChannel: request,
-		answerChannel: response,
+		answerChannel:  response,
 
-		apiToken: config.Settings["api_token"],
+		apiToken:    config.Settings["api_token"],
 		botUsername: config.Settings["username"],
 	}
 
