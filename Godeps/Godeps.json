@@ -1,0 +1,24 @@
+{
+	"ImportPath": "github.com/aichaos/scarecrow",
+	"GoVersion": "go1.5.1",
+	"Packages": [
+		"./",
+		"./listeners/slack",
+		"./listeners/console"
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/aichaos/rivescript-go",
+			"Rev": "9d7dcefb1a73e3d2277277c29de56d5b7fc08b66"
+		},
+		{
+			"ImportPath": "github.com/jprichardson/readline-go",
+			"Rev": "69d39989b17ebcfba22d05171eb786919c04b896"
+		},
+		{
+			"ImportPath": "github.com/nlopes/slack",
+			"Comment": "v0.0.1-69-g9153359",
+			"Rev": "9153359e4c6e3dd6fecd68332164321b5efd543f"
+		}
+	]
+}

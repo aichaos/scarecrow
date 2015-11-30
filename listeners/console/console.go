@@ -2,10 +2,10 @@ package console
 
 import (
 	"fmt"
+	"github.com/aichaos/scarecrow/Godeps/_workspace/src/github.com/jprichardson/readline-go"
+	"github.com/aichaos/scarecrow/listeners"
+	"github.com/aichaos/scarecrow/types"
 	"os"
-	"github.com/jprichardson/readline-go"
-	"github.com/aichaos/scarecrow/src/types"
-	"github.com/aichaos/scarecrow/src/listeners"
 )
 
 type ConsoleListener struct {

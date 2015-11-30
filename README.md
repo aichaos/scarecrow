@@ -20,13 +20,6 @@ remembers information about the people it chats with, keeps log files, etc.
 
 # Install and Build
 
-I don't have Godep set up, so install the dependencies manually for now.
-
-```bash
-go get github.com/nlopes/slack               # commit 9153359e4c6e3dd6
-go get github.com/jprichardson/readline-go   # commit 69d39989b17ebcfb
-```
-
 Build it with `make build`
 
 Run it with `./scarecrow`
