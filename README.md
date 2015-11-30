@@ -1,8 +1,8 @@
 # Scarecrow
 
-Scarecrow is a chatbot written in Go. It connects to Slack and can be chatted
-with in your terminal window, and it will probably be updated to connect to more
-things in the future too.
+Scarecrow is a chatbot written in Go. It connects to Slack and XMPP and can be
+chatted with in your terminal window, and it will probably be updated to
+connect to more things in the future too.
 
 It uses [RiveScript](http://www.rivescript.com/) as its brain back-end, it
 remembers information about the people it chats with, keeps log files, etc.
@@ -14,15 +14,20 @@ remembers information about the people it chats with, keeps log files, etc.
   * It can join public channels where it will sit in silence until a user talks
     directly to it, either by at-mentioning its username or starting a message
     with its name.
+* XMPP integration
+  * Hangouts bot via the XMPP gateway: use `talk.google.com` port `443` instead
+    of the standard XMPP ports (`5222` or `5223`)
+  * Known to work with an `ejabberd` server with valid CA certificate (you may
+    need to set `"tls-disable": "true"` in the bot's config)
 * Goroutines are spawned for each individual bot connection, so you can run
-  multiple instances of Slack bots from one program.
+  multiple bots from one instance of the program.
 * Chat with the bot on the console, too
 
 # Install and Build
 
 Build it with `make build`
 
-Run it with `./scarecrow`
+Run it with `./scarecrow-cli`
 
 Command line options are pretty basic: `--debug` for debug mode and
 `--version` to get the version number.
