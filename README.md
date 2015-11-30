@@ -35,50 +35,7 @@ edit the JSON files by hand, sorry. :frowning:
 There is an example config file in `config/bots-sample.json` -- simply copy this
 file and name it `bots.json` and edit it to configure your bot.
 
-Here is an abridged version (with comments) of the config file:
-
-```javascript
-{
-  // Personality: configure global details about your bot.
-  "personality": {
-    // Give your bot a name. Currently isn't used anywhere...
-    "name": "Scarecrow",
-
-    // Brain configuration for your bot. Currently `backend` isn't used but this
-    // bot may support more brains than just RiveScript in the future.
-    "brain": {
-      "backend": "RiveScript",
-
-      // This is the path on disk to your RiveScript *.rive files.
-      "replies": "./replies/standard"
-    }
-  },
-
-  // Listeners: array of interfaces for how people can communicate with your
-  // chatbot. You can have many listeners here. The default example config only
-  // has one for Slack and one for Console but you can have multiple for each
-  // (although having multiple Consoles may get messy and confusing...)
-  "listeners": [
-    {
-      "type": "Slack",   // Each Listener has a type
-      "enabled": false,  // Set to `true` to enable this listener on start-up
-      "settings": {      // Listener-specific configuration
-          "api_token": "XXXX-NOT-A-REAL-TOKEN-XXXX", // Slack Bot API token
-          "username": "scarecrow" // Enter the Slack bot's real username here
-      }
-    },
-    {
-      "type": "Console",
-      "enabled": true,
-      "settings": {
-          "username": "Scarecrow" // This username is shown in the console when
-                                  // the bot sends you a reply. It can be
-                                  // anything you want.
-      }
-    }
-  ]
-}
-```
+See the file `README.md` inside the `config/` directory for more documentation.
 
 ## Goroutines
 

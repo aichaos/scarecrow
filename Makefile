@@ -8,4 +8,4 @@ format:
 	gofmt -w .
 
 save-deps:
-	godep save -r ./ ./listeners/console ./listeners/slack
+	godep save -r ./ ./listeners/console ./listeners/slack ./listeners/xmpp
