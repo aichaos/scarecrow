@@ -16,6 +16,16 @@
 			}
 		},
 		{
+			"type": "XMPP",
+			"enabled": false,
+			"settings": {
+				"username": "scarecrow.bot@gmail.com",
+				"password": "XXX-PASSWORD-XXX",
+				"server": "talk.google.com",
+				"port": "443"
+			}
+		},
+		{
 			"type": "Console",
 			"enabled": true,
 			"settings": {

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var re_nasties = regexp.MustCompile(`[^A-Za-z0-9_\-@ ]`)
+var re_nasties = regexp.MustCompile(`[^A-Za-z0-9_\-@\. ]`)
 
 // InitBrain loads the RiveScript brain.
 func (self *Scarecrow) InitBrain() {

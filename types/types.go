@@ -47,6 +47,14 @@ type ListenerConfig struct {
 	Settings map[string]string `json:"settings"`
 }
 
+// Get safely gets an optional config key or falls back to a default value.
+func (self *ListenerConfig) Get(name, fallback string) string {
+	if value, ok := self.Settings[name]; ok {
+		return value
+	}
+	return fallback
+}
+
 /********************************/
 /***** RiveScript User Data *****/
 /********************************/

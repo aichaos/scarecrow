@@ -1,8 +1,8 @@
 # Scarecrow
 
-Scarecrow is a chatbot written in Go. It connects to Slack and can be chatted
-with in your terminal window, and it will probably be updated to connect to more
-things in the future too.
+Scarecrow is a chatbot written in Go. It connects to Slack and XMPP and can be
+chatted with in your terminal window, and it will probably be updated to
+connect to more things in the future too.
 
 It uses [RiveScript](http://www.rivescript.com/) as its brain back-end, it
 remembers information about the people it chats with, keeps log files, etc.
@@ -14,15 +14,20 @@ remembers information about the people it chats with, keeps log files, etc.
   * It can join public channels where it will sit in silence until a user talks
     directly to it, either by at-mentioning its username or starting a message
     with its name.
+* XMPP integration
+  * Hangouts bot via the XMPP gateway: use `talk.google.com` port `443` instead
+    of the standard XMPP ports (`5222` or `5223`)
+  * Known to work with an `ejabberd` server with valid CA certificate (you may
+    need to set `"tls-disable": "true"` in the bot's config)
 * Goroutines are spawned for each individual bot connection, so you can run
-  multiple instances of Slack bots from one program.
+  multiple bots from one instance of the program.
 * Chat with the bot on the console, too
 
 # Install and Build
 
 Build it with `make build`
 
-Run it with `./scarecrow`
+Run it with `./scarecrow-cli`
 
 Command line options are pretty basic: `--debug` for debug mode and
 `--version` to get the version number.
@@ -35,50 +40,7 @@ edit the JSON files by hand, sorry. :frowning:
 There is an example config file in `config/bots-sample.json` -- simply copy this
 file and name it `bots.json` and edit it to configure your bot.
 
-Here is an abridged version (with comments) of the config file:
-
-```javascript
-{
-  // Personality: configure global details about your bot.
-  "personality": {
-    // Give your bot a name. Currently isn't used anywhere...
-    "name": "Scarecrow",
-
-    // Brain configuration for your bot. Currently `backend` isn't used but this
-    // bot may support more brains than just RiveScript in the future.
-    "brain": {
-      "backend": "RiveScript",
-
-      // This is the path on disk to your RiveScript *.rive files.
-      "replies": "./replies/standard"
-    }
-  },
-
-  // Listeners: array of interfaces for how people can communicate with your
-  // chatbot. You can have many listeners here. The default example config only
-  // has one for Slack and one for Console but you can have multiple for each
-  // (although having multiple Consoles may get messy and confusing...)
-  "listeners": [
-    {
-      "type": "Slack",   // Each Listener has a type
-      "enabled": false,  // Set to `true` to enable this listener on start-up
-      "settings": {      // Listener-specific configuration
-          "api_token": "XXXX-NOT-A-REAL-TOKEN-XXXX", // Slack Bot API token
-          "username": "scarecrow" // Enter the Slack bot's real username here
-      }
-    },
-    {
-      "type": "Console",
-      "enabled": true,
-      "settings": {
-          "username": "Scarecrow" // This username is shown in the console when
-                                  // the bot sends you a reply. It can be
-                                  // anything you want.
-      }
-    }
-  ]
-}
-```
+See the file `README.md` inside the `config/` directory for more documentation.
 
 ## Goroutines
 

@@ -10,6 +10,7 @@ import (
 	scarecrow "github.com/aichaos/scarecrow"
 	_ "github.com/aichaos/scarecrow/listeners/console"
 	_ "github.com/aichaos/scarecrow/listeners/slack"
+	_ "github.com/aichaos/scarecrow/listeners/xmpp"
 )
 
 func main() {

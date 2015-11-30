@@ -4,7 +4,8 @@
 	"Packages": [
 		"./",
 		"./listeners/console",
-		"./listeners/slack"
+		"./listeners/slack",
+		"./listeners/xmpp"
 	],
 	"Deps": [
 		{
@@ -14,6 +15,10 @@
 		{
 			"ImportPath": "github.com/jprichardson/readline-go",
 			"Rev": "69d39989b17ebcfba22d05171eb786919c04b896"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-xmpp",
+			"Rev": "d86062634d19b6ac3e601f0d2b875879bb6b9569"
 		},
 		{
 			"ImportPath": "github.com/nlopes/slack",
