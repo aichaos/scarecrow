@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 	slackclient "github.com/nlopes/slack"
-	"github.com/aichaos/scarecrow/src/types"
-	"github.com/aichaos/scarecrow/src/listeners"
+	"github.com/aichaos/scarecrow/types"
+	"github.com/aichaos/scarecrow/listeners"
 )
 
 type SlackListener struct {

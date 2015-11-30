@@ -2,8 +2,8 @@ package scarecrow
 
 import (
 	rivescript "github.com/aichaos/rivescript-go"
-	"github.com/aichaos/scarecrow/src/listeners"
-	"github.com/aichaos/scarecrow/src/types"
+	"github.com/aichaos/scarecrow/listeners"
+	"github.com/aichaos/scarecrow/types"
 	"strings"
 	"time"
 )

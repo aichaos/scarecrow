@@ -8,7 +8,7 @@ import (
 	"errors"
 	"sort"
 	"sync"
-	"github.com/aichaos/scarecrow/src/types"
+	"github.com/aichaos/scarecrow/types"
 )
 
 // Type Listener is an interface for front-end listeners for Scarecrow.

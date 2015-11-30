@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 	"github.com/jprichardson/readline-go"
-	"github.com/aichaos/scarecrow/src/types"
-	"github.com/aichaos/scarecrow/src/listeners"
+	"github.com/aichaos/scarecrow/types"
+	"github.com/aichaos/scarecrow/listeners"
 )
 
 type ConsoleListener struct {
