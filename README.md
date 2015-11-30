@@ -83,26 +83,6 @@ Here is an abridged version (with comments) of the config file:
 }
 ```
 
-# To Do
-
-This is my first real chatbot written in Go and it isn't very perfect...
-
-Here's my list of things I want to improve on it:
-
-* Make the Listener system implement Golang interfaces.
-  * There's `src/listeners/listeners.go` that defines an interface, but it's
-    not being used by the actual listeners. Instead it's just a reference for
-    developers (me) to know what functions the listener should have.
-  * I tried making it an interface originally but it was proving to be pretty
-    difficult (errors like "Can't use a `*SlackListener` in place of a
-    `*Listener` and stuff...")
-  * As a consequence, the main code (`src/scarecrow.go`) needs special logic and
-    extra lines of code to handle the Slack vs. Console listeners, instead of
-    (ideally) being able to just have an array of listeners it can loop over
-    and deal with.
-* Revisit how I'm using Goroutines and see if it's the optimal way of doing it.
-  * See below for the Goroutine layout of this app.
-
 ## Goroutines
 
 The main thread does all the work up until the `Start()` function is called.
