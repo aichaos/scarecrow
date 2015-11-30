@@ -37,8 +37,8 @@ func (self SlackListener) New(config types.ListenerConfig, request chan types.Re
 		requestChannel: request,
 		answerChannel: response,
 
-		apiToken: config.APIToken,
-		botUsername: config.Username,
+		apiToken: config.Settings["api_token"],
+		botUsername: config.Settings["username"],
 	}
 
 	listener.api = slackclient.New(listener.apiToken)

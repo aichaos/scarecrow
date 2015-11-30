@@ -11,10 +11,6 @@ import (
 	"github.com/aichaos/scarecrow/src/types"
 )
 
-// TODO: the interface stuff isn't done properly, but until it is you can refer
-// to the defined interface in this file to see what functions a listener should
-// implement.
-
 // Type Listener is an interface for front-end listeners for Scarecrow.
 type Listener interface {
 	New(types.ListenerConfig, chan types.ReplyRequest, chan types.ReplyAnswer) Listener

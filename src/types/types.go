@@ -43,9 +43,8 @@ type BrainConfig struct {
 
 type ListenerConfig struct {
 	Type     string `json:"type"`
-	APIToken string `json:"api_token"`
 	Enabled  bool   `json:"enabled"`
-	Username string `json:"username"`
+	Settings map[string]string `json:"settings"`
 }
 
 /********************************/

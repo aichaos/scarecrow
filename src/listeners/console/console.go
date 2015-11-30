@@ -29,7 +29,7 @@ func (self ConsoleListener) New(config types.ListenerConfig, request chan types.
 	listener.requestChannel = request
 	listener.answerChannel = response
 
-	listener.username = config.Username
+	listener.username = config.Settings["username"]
 
 	return listener
 }

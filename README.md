@@ -108,7 +108,7 @@ Then, for each active Listener:
 # License
 
 ```
-Admiral Chatbot
+Scarecrow - A RiveScript Chatbot written in Go
 Copyright (C) 2015  Noah Petherbridge
 
 This program is free software; you can redistribute it and/or modify
