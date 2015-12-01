@@ -1,4 +1,5 @@
 /scarecrow-cli
+/config/admins.json
 /config/bots.json
 /logs
 /users

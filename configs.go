@@ -17,8 +17,49 @@ func (self *Scarecrow) InitConfig() {
 	// Load the bots configuration.
 	self.Info("Loading config: bots.json")
 	self.BotsConfig = self.LoadBotsConfig()
+	self.AdminsConfig = self.LoadAdminsConfig()
 }
 
+// LoadAdminsConfig loads the config/admins.json config file.
+func (self *Scarecrow) LoadAdminsConfig() types.AdminsConfig {
+	config := types.AdminsConfig{
+		Admins: []string{"CLI-console"},
+	}
+
+	fh, err := os.Open("config/admins.json")
+	if err != nil {
+		self.Warn("Couldn't open config/admins.json; Only the local Console user will have admin rights.")
+		return config
+	}
+	defer fh.Close()
+
+	decoder := json.NewDecoder(fh)
+	err = decoder.Decode(&config)
+	if err != nil {
+		fmt.Println("Error decoding admins.json:", err)
+		os.Exit(1)
+	}
+
+	return config
+}
+
+// SaveAdminsConfig saves the config/admins.json config file.
+func (self *Scarecrow) SaveAdminsConfig(cfg types.AdminsConfig) {
+	fh, err := os.Create("config/admins.json")
+	if err != nil {
+		self.Error("Unable to create admins file: %v", err)
+		return
+	}
+	defer fh.Close()
+
+	encoder := json.NewEncoder(fh)
+	err = encoder.Encode(cfg)
+	if err != nil {
+		self.Error("Error encoding JSON file: %v", err)
+	}
+}
+
+// LoadBotsConfig loads the config/bots.json config file.
 func (self *Scarecrow) LoadBotsConfig() types.BotsConfig {
 	config := types.BotsConfig{}
 

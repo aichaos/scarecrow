@@ -6,3 +6,7 @@
 
 + botmaster only
 - This command can only be used by my botmaster. <id> != <bot master>
+
++ am i an admin
+* <get isAdmin> == true => Yes, you are an admin user.
+- No, you are not an admin.

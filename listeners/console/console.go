@@ -63,9 +63,11 @@ func (self *ConsoleListener) DoOneLoop() {
 }
 
 func (self *ConsoleListener) OnMessage(msg string) {
-	request := types.ReplyRequest{}
-	request.Username = "console"
-	request.Message = msg
+	request := types.ReplyRequest{
+		Listener: "CLI",
+		Username: "console",
+		Message: msg,
+	}
 	self.requestChannel <- request
 }
 

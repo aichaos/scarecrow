@@ -43,7 +43,8 @@ The file looks something like this (with comments):
       "enabled": false,  // Set to `true` to enable this listener on start-up
       "settings": {      // Listener-specific configuration
           "api_token": "XXXX-NOT-A-REAL-TOKEN-XXXX", // Slack Bot API token
-          "username": "scarecrow" // Enter the Slack bot's real username here
+          "username": "scarecrow",    // The Slack bot's real username
+          "team": "example.slack.com" // Your Slack team's domain
       }
     },
     {
@@ -77,6 +78,10 @@ write the word `"true"` or `"false"` in quotes. Numbers are also quoted, etc.
 * `username`: The bot's username in Slack. You should make sure this accurately
   matches the bot's real username, as Scarecrow uses this name to look up its
   own user ID to identify when somebody at-mentions it in a Slack channel.
+* `team`: The Slack team's domain. This is an arbitrary string but it should
+  look like `teamname.slack.com`. The team is appended onto the end of Slack
+  usernames for the purpose of keeping like-usernames in different Slack teams
+  separate under the hood, for user variable, logging and admin purposes.
 
 ### XMPP
 

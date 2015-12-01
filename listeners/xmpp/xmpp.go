@@ -123,10 +123,12 @@ func (self *XMPPListener) OnMessage(v xmppclient.Chat) {
 	}
 
 	if len(message) > 0 {
-		request := types.ReplyRequest{}
-		request.BotUsername = self.username
-		request.Username = username
-		request.Message = message
+		request := types.ReplyRequest{
+			Listener: "XMPP",
+			BotUsername: self.username,
+			Username: username,
+			Message: message,
+		}
 		self.requestChannel <- request
 	}
 }

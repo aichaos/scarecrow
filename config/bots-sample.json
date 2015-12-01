@@ -12,7 +12,8 @@
 			"enabled": false,
 			"settings": {
 				"api_token": "XXX-SLACK-API-TOKEN-XXX",
-				"username": "scarecrow"
+				"username": "scarecrow",
+				"team": "your-team.slack.com"
 			}
 		},
 		{

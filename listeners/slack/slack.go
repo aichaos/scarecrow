@@ -2,10 +2,11 @@ package slack
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 	slackclient "github.com/aichaos/scarecrow/Godeps/_workspace/src/github.com/nlopes/slack"
 	"github.com/aichaos/scarecrow/listeners"
 	"github.com/aichaos/scarecrow/types"
-	"strings"
 )
 
 type SlackListener struct {
@@ -16,6 +17,7 @@ type SlackListener struct {
 	// Configuration values for the Slack listener.
 	apiToken    string
 	botUsername string
+	team string
 
 	// Internal data.
 	api            *slackclient.Client
@@ -25,6 +27,10 @@ type SlackListener struct {
 	userName2Id    map[string]string            // Map user names to IDs
 	userData       map[string]*slackclient.User // Full user details by ID
 }
+
+var (
+	RE_MAILTO = regexp.MustCompile(`<mailto:(.+?)\|(.+?)>`)
+)
 
 func init() {
 	listeners.Register("Slack", &SlackListener{})
@@ -39,6 +45,7 @@ func (self SlackListener) New(config types.ListenerConfig, request chan types.Re
 
 		apiToken:    config.Settings["api_token"],
 		botUsername: config.Settings["username"],
+		team: config.Settings["team"],
 	}
 
 	listener.api = slackclient.New(listener.apiToken)
@@ -109,6 +116,31 @@ func (self *SlackListener) OnMessage(ev *slackclient.MessageEvent) {
 	userName := self.userId2Name[userId]
 	text := msg.Text
 
+	// Ignore messages from ourself.
+	if userName == self.botUsername {
+		fmt.Printf("Ignore message from self: [%s] %s\n", userName, text)
+		return
+	}
+
+	// Append the user's team name to the end of their nick.
+	userName = fmt.Sprintf("%s@%s", userName, self.team)
+
+	// Clean up "mailto:" links in the message.
+	giveup := 0
+	for strings.Index(text, "<mailto:") > -1 {
+		giveup += 1
+		if giveup > 50 {
+			break
+		}
+
+		match := RE_MAILTO.FindStringSubmatch(text)
+		if len(match) > 0 {
+			pattern := fmt.Sprintf("<mailto:%s|%s>", match[1], match[2])
+			text = strings.Replace(text, pattern, match[2], -1)
+		}
+	}
+
+
 	// Store the user ID->channel ID map.
 	self.userChannelMap[userId] = channelId
 
@@ -132,16 +164,21 @@ func (self *SlackListener) OnMessage(ev *slackclient.MessageEvent) {
 
 	// Send a request for a response.
 	if willAnswer {
-		request := types.ReplyRequest{}
-		request.BotUsername = self.botUsername
-		request.Username = userName
-		request.Message = text
+		request := types.ReplyRequest{
+			Listener: "Slack",
+			BotUsername: self.botUsername,
+			Username: userName,
+			Message: text,
+		}
 		self.requestChannel <- request
 	}
 }
 
 // SendMessage sends a user a response.
 func (self *SlackListener) SendMessage(userName string, message string) {
+	// Strip off the team name.
+	userName = strings.Split(userName, "@")[0]
+
 	// Find the user ID for that name.
 	userId := self.userName2Id[userName]
 

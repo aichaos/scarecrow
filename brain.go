@@ -28,6 +28,13 @@ func (self *Scarecrow) GetReply(botUsername, username, message string) string {
 	// Load their user variables.
 	self.LoadUservars(profile)
 
+	// Set whether they're an admin.
+	if self.IsAdmin(username) {
+		self.Brain.SetUservar(username, "isAdmin", "true")
+	} else {
+		self.Brain.SetUservar(username, "isAdmin", "false")
+	}
+
 	// Get a reply.
 	reply := self.Brain.Reply(username, message)
 
