@@ -19,6 +19,11 @@ remembers information about the people it chats with, keeps log files, etc.
     of the standard XMPP ports (`5222` or `5223`)
   * Known to work with an `ejabberd` server with valid CA certificate (you may
     need to set `"tls-disable": "true"` in the bot's config)
+* User roles/permissions
+  * Admin users can reload the RiveScript brain without rebooting the entire bot
+  * Users across different platforms are uniquely identifiable, so you can add
+    admin users without risking a different user with a matching name on a
+    different platform having admin rights.
 * Goroutines are spawned for each individual bot connection, so you can run
   multiple bots from one instance of the program.
 * Chat with the bot on the console, too
@@ -36,28 +41,6 @@ Command line options are pretty basic: `--debug` for debug mode and
 
 [Documentation](docs/README.md) is available as Markdown files in the `docs/`
 directory.
-
-## Goroutines
-
-The main thread does all the work up until the `Start()` function is called.
-
-Then, for each active Listener:
-
-* Two channels are created:
-  * `ReplyRequest`: Messages from the listener that need a RiveScript reply.
-  * `ReplyAnswer`: Responses from RiveScript going back to the listener.
-* A Goroutine (`ManageRequestChannel`) is spawned which watches the
-  `ReplyRequest` channel, to get a reply and send back the response over the
-  other channel.
-* The listener itself also spawns number of Goroutines:
-  * The Slack listener spawns one from the Slack RTM API module (unavoidable)
-    and also one for maintaining its own `MainLoop()`
-    * The `MainLoop` checks for messages from the Slack RTM channel *and* the
-      `ReplyAnswer` channel (for sending replies to the users).
-  * The Console listener spawns two Goroutines: one to read from the terminal
-    (`os.Stdin`) and write to a message channel, and another to run its
-    `MainLoop()` -- which, like the Slack listener, reads from the readline
-    channel and the `ReplyAnswer` channel.
 
 # License
 
