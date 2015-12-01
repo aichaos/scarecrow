@@ -5,6 +5,13 @@ config format may change in the future, as JSON isn't the most user-friendly
 format and lacks support for comments, which would allow a config file to be
 self-documenting.
 
+# Admin Configuration (admins.json)
+
+This config file holds the usernames of the bot's "admin" users (users who
+have access to commands such as `!reload`). By default only the local console
+user (`CLI-console`) has admin rights. Admins can be added or removed via the
+`!op` and `!deop` command (see [Admin Commands](./Admin-Commands.md))
+
 # Bot Configuration (bots.json)
 
 This is the config file for the bots and their connections to various messaging

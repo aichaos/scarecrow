@@ -101,7 +101,7 @@ func (self *Scarecrow) ManageRequestChannel(request chan types.ReplyRequest,
 
 			// Format the user's name to include the listener prefix, to
 			// globally distinguish users on different platforms.
-			uid := fmt.Sprintf("%s-%s", message.Listener, message.Username)
+			uid := fmt.Sprintf("%s-%s", message.Listener, strings.ToLower(message.Username))
 
 			// Trim their message of excess spacing.
 			input := strings.Trim(message.Message, " ")
