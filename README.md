@@ -32,15 +32,10 @@ Run it with `./scarecrow-cli`
 Command line options are pretty basic: `--debug` for debug mode and
 `--version` to get the version number.
 
-# Configuration
+# Documentation
 
-The bot is configured through JSON files in the `config` folder. You'll have to
-edit the JSON files by hand, sorry. :frowning:
-
-There is an example config file in `config/bots-sample.json` -- simply copy this
-file and name it `bots.json` and edit it to configure your bot.
-
-See the file `README.md` inside the `config/` directory for more documentation.
+[Documentation](docs/README.md) is available as Markdown files in the `docs/`
+directory.
 
 ## Goroutines
 

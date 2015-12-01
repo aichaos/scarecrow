@@ -44,8 +44,9 @@ func (self XMPPListener) New(config types.ListenerConfig, request chan types.Rep
 
 	// Optional settings.
 	var debug bool = config.Get("debug", "false") == "true"
-	var tlsDisable bool = config.Get("tls-disable", "false") == "true"
+	var tlsDisable bool = config.Get("notls", "false") == "true"
 	var tlsNoVerify bool = config.Get("tls-no-verify", "false") == "true"
+	var startTLS bool = config.Get("starttls", "false") == "true"
 
 	// Disabling security?
 	if tlsNoVerify {
@@ -63,6 +64,7 @@ func (self XMPPListener) New(config types.ListenerConfig, request chan types.Rep
 		Debug:         debug,
 		Session:       true, // Use server session
 		NoTLS:         tlsDisable,
+		StartTLS:      startTLS,
 		// Status:        "xa",
 		// StatusMessage: "test status",
 	}

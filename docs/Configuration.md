@@ -1,4 +1,9 @@
-# Configuration Files
+# Configuration
+
+Scarecrow is configured through some JSON files in the `config/` folder. The
+config format may change in the future, as JSON isn't the most user-friendly
+format and lacks support for comments, which would allow a config file to be
+self-documenting.
 
 # Bot Configuration (bots.json)
 
@@ -9,7 +14,7 @@ Look at `bots-sample.json` for an example, and create a file named `bots.json`
 and fill in the information for your bots. You can simply copy/paste the
 sample file and then edit it.
 
-The file looks something like this, with comments:
+The file looks something like this (with comments):
 
 ```javascript
 {
@@ -30,7 +35,7 @@ The file looks something like this, with comments:
 
   // Listeners: array of interfaces for how people can communicate with your
   // chatbot. You can have many listeners here. The default example config only
-  // has one for Slack and one for Console but you can have multiple for each
+  // has one entry for each type of listener but you can have many entries
   // (although having multiple Consoles may get messy and confusing...)
   "listeners": [
     {
@@ -85,7 +90,54 @@ Required fields:
 Optional fields:
 
 * `debug`: If `"true"`, debugging is enabled in the XMPP module.
-* `tls-disable`: If `"true"`, TLS will not be used with the XMPP server.
+* `notls`: If `"true"`, TLS will not be used with the initial connection to the
+  XMPP server (it can be combined with `starttls: true` if the server supports
+  StartTLS)
+* `starttls`: If `"true"`, the connection will be upgraded with StartTLS.
 * `tls-no-verify`: If `"true"`, the TLS server certificate is not verified
   (this setting will be needed if you use a self-signed certificate on the
   XMPP server).
+
+## Listener Examples
+
+Full example config snippets for certain listeners.
+
+### Google Hangouts via XMPP
+
+```json
+{
+    "type": "XMPP",
+    "enabled": true,
+    "settings": {
+        "username": "scarecrow.bot@gmail.com",
+        "password": "XXX-PASSWORD-XXX",
+        "server": "talk.google.com",
+        "port": "443"
+    }
+}
+```
+
+### XMPP with StartTLS
+
+Scenario: your XMPP server doesn't speak TLS directly (traditionally was done on
+port `5223`), but listens on the clear-text port `5222` and supports (or
+requires) StartTLS to upgrade the connection to have encryption.
+
+```json
+{
+    "type": "XMPP",
+    "enabled": true,
+    "settings": {
+        "username": "scarecrow@jabber.com",
+        "password": "XXX-PASSWORD-XXX",
+        "server": "jabber.com",
+        "port": "5222",
+        "notls": "true",
+        "starttls": "true"
+    }
+}
+```
+
+Note: we use the `notls` ("No TLS") option because the server connection doesn't
+begin as TLS. The `starttls` option then tells it to use StartTLS over the
+non-secure connection.
