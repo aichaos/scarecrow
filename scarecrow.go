@@ -188,7 +188,7 @@ func (self *Scarecrow) OnMessage(req *types.ReplyRequest, res chan types.Communi
 	}
 
 	if reply == "" {
-		reply = self.GetReply(req.BotUsername, uid, req.Message)
+		reply = self.GetReply(req.BotUsername, uid, req.Message, req.GroupChat)
 	} else {
 		// Log command transactions too.
 		self.LogTransaction(uid, input, req.BotUsername, reply)

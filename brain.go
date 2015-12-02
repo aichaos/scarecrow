@@ -18,8 +18,17 @@ func (self *Scarecrow) InitBrain() {
 	self.Brain.SortReplies()
 }
 
-// GetReply actually gets a response for a user.
-func (self *Scarecrow) GetReply(botUsername, username, message string) string {
+/*
+GetReply actually gets a response for a user.
+
+Parameters:
+- botUsername: The bot's username, for logging purposes.
+- username: The user's unique user ID.
+- message: The user's message.
+- groupChat: Whether this message originated from a public room and not a direct
+  message.
+*/
+func (self *Scarecrow) GetReply(botUsername, username, message string, groupChat bool) string {
 	message = strings.Trim(message, " ")
 	// Path to the user's persisted profile data.
 	safeUsername := re_nasties.ReplaceAllString(username, "_")
@@ -33,6 +42,13 @@ func (self *Scarecrow) GetReply(botUsername, username, message string) string {
 		self.Brain.SetUservar(username, "isAdmin", "true")
 	} else {
 		self.Brain.SetUservar(username, "isAdmin", "false")
+	}
+
+	// Other metavariables.
+	if groupChat {
+		self.Brain.SetUservar(username, "isGroupChat", "true")
+	} else {
+		self.Brain.SetUservar(username, "isGroupChat", "false")
 	}
 
 	// Get a reply.

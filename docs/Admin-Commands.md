@@ -14,6 +14,12 @@ channel).
   This is useful for actively developing its brain so you can quickly load your
   new changes.
 
+* `!halt`
+
+  Completely shut down the bot. This issues Stop commands to all of the
+  listeners, waits for their acknowledgement that they have been stopped, and
+  then exits the program.
+
 * `!op <user-id>`
 
   This adds `user-id` to the admins list. Note that the user ID must match the

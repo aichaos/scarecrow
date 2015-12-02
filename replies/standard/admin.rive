@@ -10,3 +10,6 @@
 + am i an admin
 * <get isAdmin> == true => Yes, you are an admin user.
 - No, you are not an admin.
+
++ is this a group chat
+- Is group chat? <get isGroupChat>
