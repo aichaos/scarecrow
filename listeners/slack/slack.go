@@ -11,10 +11,11 @@ import (
 
 type SlackListener struct {
 	// Channels to communicate with the parent bot.
-	requestChannel chan types.ReplyRequest
-	answerChannel  chan types.ReplyAnswer
+	requestChannel chan types.CommunicationChannel
+	answerChannel  chan types.CommunicationChannel
 
 	// Configuration values for the Slack listener.
+	id string
 	apiToken    string
 	botUsername string
 	team string
@@ -37,11 +38,11 @@ func init() {
 }
 
 // New creates a new Slack Listener.
-func (self SlackListener) New(config types.ListenerConfig, request chan types.ReplyRequest,
-	response chan types.ReplyAnswer) listeners.Listener {
+func (self SlackListener) New(config types.ListenerConfig, request, answer chan types.CommunicationChannel) listeners.Listener {
 	listener := SlackListener{
+		id: config.Id,
 		requestChannel: request,
-		answerChannel:  response,
+		answerChannel:  answer,
 
 		apiToken:    config.Settings["api_token"],
 		botUsername: config.Settings["username"],
@@ -58,10 +59,21 @@ func (self SlackListener) New(config types.ListenerConfig, request chan types.Re
 	return listener
 }
 
+func (self SlackListener) InputChannel() chan types.CommunicationChannel {
+	return self.answerChannel
+}
+
 func (self SlackListener) Start() {
 	self.rtm = self.api.NewRTM()
 	go self.rtm.ManageConnection()
 	go self.MainLoop()
+}
+
+func (self *SlackListener) Stop() {
+	self.rtm.Disconnect()
+	self.requestChannel <- types.CommunicationChannel{
+		Data: &types.Stopped{self.id},
+	}
 }
 
 func (self *SlackListener) MainLoop() {
@@ -93,7 +105,12 @@ func (self *SlackListener) DoOneLoop() {
 			// Ignore other events.
 		}
 	case answer := <-self.answerChannel:
-		self.SendMessage(answer.Username, answer.Message)
+		switch ev := answer.Data.(type) {
+		case *types.ReplyAnswer:
+			self.SendMessage(ev.Username, ev.Message)
+		case *types.Stop:
+			self.Stop()
+		}
 	}
 }
 
@@ -144,14 +161,16 @@ func (self *SlackListener) OnMessage(ev *slackclient.MessageEvent) {
 	// Store the user ID->channel ID map.
 	self.userChannelMap[userId] = channelId
 
-	// Are we going to answer this message?
-	willAnswer := false
+	willAnswer := false  // Are we going to answer this message?
+	groupChat := false   // Is this a group chat message?
 
 	// Was this a public channel message or a direct message?
 	if channelId[0] == 'D' {
 		// Always answer DM's.
 		willAnswer = true
 	} else {
+		groupChat = true
+
 		// In a channel, make sure the bot's name was at-mentioned.
 		atMention := fmt.Sprintf("<@%s>", self.userName2Id[self.botUsername])
 		if strings.Index(text, self.botUsername) == 0 || strings.Index(text, atMention) > -1 {
@@ -164,11 +183,14 @@ func (self *SlackListener) OnMessage(ev *slackclient.MessageEvent) {
 
 	// Send a request for a response.
 	if willAnswer {
-		request := types.ReplyRequest{
-			Listener: "Slack",
-			BotUsername: self.botUsername,
-			Username: userName,
-			Message: text,
+		request := types.CommunicationChannel{
+			Data: &types.ReplyRequest{
+				Listener: "Slack",
+				GroupChat: groupChat,
+				BotUsername: self.botUsername,
+				Username: userName,
+				Message: text,
+			},
 		}
 		self.requestChannel <- request
 	}

@@ -46,6 +46,7 @@ The file looks something like this (with comments):
   // (although having multiple Consoles may get messy and confusing...)
   "listeners": [
     {
+      "id": "Slackbot1", // Each listener needs a unique ID
       "type": "Slack",   // Each Listener has a type
       "enabled": false,  // Set to `true` to enable this listener on start-up
       "settings": {      // Listener-specific configuration
@@ -55,6 +56,7 @@ The file looks something like this (with comments):
       }
     },
     {
+      "id": "Console",
       "type": "Console",
       "enabled": true,
       "settings": {
@@ -66,6 +68,16 @@ The file looks something like this (with comments):
   ]
 }
 ```
+
+Every listener has these three attributes:
+
+* `id`: A unique ID for this listener. It can be anything you want; the ID is
+  used to keep track of the listener internally (e.g. to issue shutdown
+  requests) and turns up in some of the log files.
+* `type`: The name of the platform the listener runs on. These are dictated by
+  the listener implementations.
+* `enabled`: Boolean, if `false` then this listener is not connected when the
+  bot starts up.
 
 ## Listener Settings
 

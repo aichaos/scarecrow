@@ -8,6 +8,7 @@
 	},
 	"listeners": [
 		{
+			"id": "Slackbot1",
 			"type": "Slack",
 			"enabled": false,
 			"settings": {
@@ -17,6 +18,7 @@
 			}
 		},
 		{
+			"id": "XMPPBot1",
 			"type": "XMPP",
 			"enabled": false,
 			"settings": {
@@ -27,6 +29,7 @@
 			}
 		},
 		{
+			"id": "Console",
 			"type": "Console",
 			"enabled": true,
 			"settings": {

@@ -11,10 +11,11 @@ import (
 
 type XMPPListener struct {
 	// Channels to communicate with the parent bot.
-	requestChannel chan types.ReplyRequest
-	answerChannel  chan types.ReplyAnswer
+	requestChannel chan types.CommunicationChannel
+	answerChannel  chan types.CommunicationChannel
 
 	// Configuration values for the XMPP listener.
+	id string
 	username string
 	port     string
 	password string
@@ -30,11 +31,11 @@ func init() {
 }
 
 // New creates a new Slack Listener.
-func (self XMPPListener) New(config types.ListenerConfig, request chan types.ReplyRequest,
-	response chan types.ReplyAnswer) listeners.Listener {
+func (self XMPPListener) New(config types.ListenerConfig, request, answer chan types.CommunicationChannel) listeners.Listener {
 	listener := XMPPListener{
+		id: config.Id,
 		requestChannel: request,
-		answerChannel:  response,
+		answerChannel:  answer,
 
 		server:   config.Settings["server"],
 		port:     config.Settings["port"],
@@ -72,6 +73,10 @@ func (self XMPPListener) New(config types.ListenerConfig, request chan types.Rep
 	return listener
 }
 
+func (self XMPPListener) InputChannel() chan types.CommunicationChannel {
+	return self.answerChannel
+}
+
 func (self XMPPListener) Start() {
 	var err error
 
@@ -84,13 +89,21 @@ func (self XMPPListener) Start() {
 	go self.AnswerLoop()
 }
 
+func (self *XMPPListener) Stop() {
+	self.client.Close()
+	self.requestChannel <- types.CommunicationChannel{
+		Data: &types.Stopped{self.id},
+	}
+}
+
 // XMPPLoop polls the XMPP server for incoming messages and events.
 func (self *XMPPListener) XMPPLoop() {
 	for {
 		chat, err := self.client.Recv()
 		if err != nil {
 			fmt.Printf("XMPP Error: %s\n", err)
-			continue
+			self.Stop()
+			return
 		}
 
 		switch v := chat.(type) {
@@ -108,7 +121,12 @@ func (self *XMPPListener) XMPPLoop() {
 func (self *XMPPListener) AnswerLoop() {
 	for {
 		answer := <- self.answerChannel
-		self.SendMessage(answer.Username, answer.Message)
+		switch ev := answer.Data.(type) {
+		case *types.ReplyAnswer:
+			self.SendMessage(ev.Username, ev.Message)
+		case *types.Stop:
+			self.Stop()
+		}
 	}
 }
 
@@ -123,11 +141,13 @@ func (self *XMPPListener) OnMessage(v xmppclient.Chat) {
 	}
 
 	if len(message) > 0 {
-		request := types.ReplyRequest{
-			Listener: "XMPP",
-			BotUsername: self.username,
-			Username: username,
-			Message: message,
+		request := types.CommunicationChannel{
+			Data: &types.ReplyRequest{
+				Listener: "XMPP",
+				BotUsername: self.username,
+				Username: username,
+				Message: message,
+			},
 		}
 		self.requestChannel <- request
 	}

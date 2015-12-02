@@ -10,11 +10,14 @@ import (
 
 type ConsoleListener struct {
 	// Channels to communicate with the parent bot.
-	requestChannel chan types.ReplyRequest
-	answerChannel  chan types.ReplyAnswer
+	requestChannel chan types.CommunicationChannel
+	answerChannel  chan types.CommunicationChannel
+
+	// Configuration values for the Console listener.
+	id string
+	username string
 
 	// Internal data.
-	username string
 	readline chan string
 }
 
@@ -23,21 +26,34 @@ func init() {
 }
 
 // New creates a new Slack Listener.
-func (self ConsoleListener) New(config types.ListenerConfig, request chan types.ReplyRequest,
-	response chan types.ReplyAnswer) listeners.Listener {
-	listener := new(ConsoleListener)
-	listener.requestChannel = request
-	listener.answerChannel = response
-
-	listener.username = config.Settings["username"]
+func (self ConsoleListener) New(config types.ListenerConfig, request, answer chan types.CommunicationChannel) listeners.Listener {
+	listener := ConsoleListener{
+		id: config.Id,
+		requestChannel: request,
+		answerChannel: answer,
+		username: config.Settings["username"],
+	}
 
 	return listener
+}
+
+func (self ConsoleListener) InputChannel() chan types.CommunicationChannel {
+	return self.answerChannel
 }
 
 func (self ConsoleListener) Start() {
 	self.readline = make(chan string)
 	go self.ListenToConsole()
 	go self.MainLoop()
+}
+
+func (self *ConsoleListener) Stop() {
+	request := types.CommunicationChannel{
+		Data: &types.Stopped{
+			ListenerId: self.id,
+		},
+	}
+	self.requestChannel <- request
 }
 
 func (self *ConsoleListener) ListenToConsole() {
@@ -58,15 +74,22 @@ func (self *ConsoleListener) DoOneLoop() {
 	case msg := <-self.readline:
 		self.OnMessage(msg)
 	case answer := <-self.answerChannel:
-		self.SendMessage(answer.Username, answer.Message)
+		switch ev := answer.Data.(type) {
+		case *types.ReplyAnswer:
+			self.SendMessage(ev.Username, ev.Message)
+		case *types.Stop:
+			self.Stop()
+		}
 	}
 }
 
 func (self *ConsoleListener) OnMessage(msg string) {
-	request := types.ReplyRequest{
-		Listener: "CLI",
-		Username: "console",
-		Message: msg,
+	request := types.CommunicationChannel{
+		Data: &types.ReplyRequest{
+			Listener: "CLI",
+			Username: "console",
+			Message: msg,
+		},
 	}
 	self.requestChannel <- request
 }

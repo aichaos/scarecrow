@@ -13,8 +13,9 @@ import (
 
 // Type Listener is an interface for front-end listeners for Scarecrow.
 type Listener interface {
-	New(types.ListenerConfig, chan types.ReplyRequest, chan types.ReplyAnswer) Listener
+	New(types.ListenerConfig, chan types.CommunicationChannel, chan types.CommunicationChannel) Listener
 	Start()
+	InputChannel() chan types.CommunicationChannel
 }
 
 var (
@@ -47,7 +48,7 @@ func Listeners() []string {
 	return list
 }
 
-func Create(name string, cfg types.ListenerConfig, reply chan types.ReplyRequest, answer chan types.ReplyAnswer) (Listener, error) {
+func Create(name string, cfg types.ListenerConfig, reply, answer chan types.CommunicationChannel) (Listener, error) {
 	if _, ok := listeners[name]; !ok {
 		return nil, errors.New("Unknown listener type.")
 	}
