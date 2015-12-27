@@ -10,7 +10,7 @@
 	"Deps": [
 		{
 			"ImportPath": "github.com/aichaos/rivescript-go",
-			"Rev": "9d7dcefb1a73e3d2277277c29de56d5b7fc08b66"
+			"Rev": "765fab1c0a99a0328afe7a96caadce7084eb2928"
 		},
 		{
 			"ImportPath": "github.com/jprichardson/readline-go",
