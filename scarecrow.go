@@ -10,6 +10,7 @@ import (
 	rivescript "github.com/aichaos/rivescript-go"
 	"github.com/aichaos/scarecrow/listeners"
 	"github.com/aichaos/scarecrow/types"
+	"github.com/aichaos/scarecrow/web"
 )
 
 const (
@@ -29,6 +30,7 @@ type Scarecrow struct {
 	// Internal structures.
 	AdminsConfig types.AdminsConfig
 	BotsConfig types.BotsConfig
+	WebConfig types.WebConfig
 	Brain      *rivescript.RiveScript
 
 	// Listeners.
@@ -79,6 +81,9 @@ func (self *Scarecrow) Start() {
 		constructor.Start()
 		self.Listeners[listener.Id] = constructor
 	}
+
+	// Start the web server front-end.
+	go web.StartServer(self.WebConfig)
 
 	self.Run()
 }

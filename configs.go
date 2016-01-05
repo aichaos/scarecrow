@@ -18,6 +18,7 @@ func (self *Scarecrow) InitConfig() {
 	self.Info("Loading config: bots.json")
 	self.BotsConfig = self.LoadBotsConfig()
 	self.AdminsConfig = self.LoadAdminsConfig()
+	self.WebConfig = self.LoadWebConfig()
 }
 
 // LoadAdminsConfig loads the config/admins.json config file.
@@ -73,6 +74,26 @@ func (self *Scarecrow) LoadBotsConfig() types.BotsConfig {
 	err = decoder.Decode(&config)
 	if err != nil {
 		fmt.Println("Error decoding bots.json:", err)
+		os.Exit(1)
+	}
+
+	return config
+}
+
+// LoadWebConfig loads the config/web.json config file.
+func (self *Scarecrow) LoadWebConfig() types.WebConfig {
+	config := types.WebConfig{}
+
+	fh, err := os.Open("config/web.json")
+	if err != nil {
+		panic("Couldn't open config/web.json; does it exist?")
+	}
+	defer fh.Close()
+
+	decoder := json.NewDecoder(fh)
+	err = decoder.Decode(&config)
+	if err != nil {
+		fmt.Println("Error decoding web.json:", err)
 		os.Exit(1)
 	}
 
