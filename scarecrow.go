@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 	"time"
-	rivescript "github.com/aichaos/scarecrow/Godeps/_workspace/src/github.com/aichaos/rivescript-go"
+	rivescript "github.com/aichaos/rivescript-go"
 	"github.com/aichaos/scarecrow/listeners"
 	"github.com/aichaos/scarecrow/types"
 )

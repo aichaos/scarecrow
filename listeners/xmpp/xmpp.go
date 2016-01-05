@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"strings"
-	xmppclient "github.com/aichaos/scarecrow/Godeps/_workspace/src/github.com/mattn/go-xmpp"
+	xmppclient "github.com/mattn/go-xmpp"
 	"github.com/aichaos/scarecrow/listeners"
 	"github.com/aichaos/scarecrow/types"
 )

@@ -2,7 +2,7 @@ package scarecrow
 
 import (
 	"fmt"
-	rivescript "github.com/aichaos/scarecrow/Godeps/_workspace/src/github.com/aichaos/rivescript-go"
+	rivescript "github.com/aichaos/rivescript-go"
 	"os"
 	"regexp"
 	"strings"

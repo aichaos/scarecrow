@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
-	slackclient "github.com/aichaos/scarecrow/Godeps/_workspace/src/github.com/nlopes/slack"
+	slackclient "github.com/nlopes/slack"
 	"github.com/aichaos/scarecrow/listeners"
 	"github.com/aichaos/scarecrow/types"
 )
