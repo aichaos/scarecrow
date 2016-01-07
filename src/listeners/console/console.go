@@ -3,8 +3,8 @@ package console
 import (
 	"fmt"
 	"github.com/jprichardson/readline-go"
-	"github.com/aichaos/scarecrow/listeners"
-	"github.com/aichaos/scarecrow/types"
+	"github.com/aichaos/scarecrow/src/listeners"
+	"github.com/aichaos/scarecrow/src/types"
 	"os"
 )
 

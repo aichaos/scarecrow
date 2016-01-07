@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 	xmppclient "github.com/mattn/go-xmpp"
-	"github.com/aichaos/scarecrow/listeners"
-	"github.com/aichaos/scarecrow/types"
+	"github.com/aichaos/scarecrow/src/listeners"
+	"github.com/aichaos/scarecrow/src/types"
 )
 
 type XMPPListener struct {

@@ -7,10 +7,10 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	scarecrow "github.com/aichaos/scarecrow"
-	_ "github.com/aichaos/scarecrow/listeners/console"
-	_ "github.com/aichaos/scarecrow/listeners/slack"
-	_ "github.com/aichaos/scarecrow/listeners/xmpp"
+	scarecrow "github.com/aichaos/scarecrow/src"
+	_ "github.com/aichaos/scarecrow/src/listeners/console"
+	_ "github.com/aichaos/scarecrow/src/listeners/slack"
+	_ "github.com/aichaos/scarecrow/src/listeners/xmpp"
 )
 
 func main() {

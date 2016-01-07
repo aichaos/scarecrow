@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 	slackclient "github.com/nlopes/slack"
-	"github.com/aichaos/scarecrow/listeners"
-	"github.com/aichaos/scarecrow/types"
+	"github.com/aichaos/scarecrow/src/listeners"
+	"github.com/aichaos/scarecrow/src/types"
 )
 
 type SlackListener struct {

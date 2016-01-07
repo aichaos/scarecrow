@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 	rivescript "github.com/aichaos/rivescript-go"
-	"github.com/aichaos/scarecrow/listeners"
-	"github.com/aichaos/scarecrow/types"
-	"github.com/aichaos/scarecrow/web"
+	"github.com/aichaos/scarecrow/src/listeners"
+	"github.com/aichaos/scarecrow/src/types"
+	"github.com/aichaos/scarecrow/src/web"
 )
 
 const (

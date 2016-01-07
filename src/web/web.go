@@ -3,7 +3,7 @@ package web
 import (
 	"fmt"
 	"net/http"
-	"github.com/aichaos/scarecrow/types"
+	"github.com/aichaos/scarecrow/src/types"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
