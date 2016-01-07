@@ -8,6 +8,11 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+type Test struct {
+	gorm.Model
+	Count int `sql:"DEFAULT:0"`
+}
+
 type AdminSetting struct {
 	// Whether users can register their own accounts
 	OpenRegistration bool `sql:"DEFAULT:false"`
