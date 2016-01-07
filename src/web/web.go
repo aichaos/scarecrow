@@ -9,7 +9,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type appHandler struct {
+type appContext struct {
 	db *gorm.DB
 }
 
@@ -26,7 +26,7 @@ func StartServer(config types.WebConfig) {
 
 	db.CreateTable(&models.Test{})
 
-	handler := &appHandler{db: &db}
-	r := registerRoutes(handler)
+	g := &appContext{db: &db}
+	r := registerRoutes(g)
 	http.ListenAndServe(fmt.Sprintf("%s:%d", config.Host, config.Port), r)
 }
