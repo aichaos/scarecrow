@@ -2,15 +2,15 @@ package scarecrow
 
 import (
 	"fmt"
+	rivescript "github.com/aichaos/rivescript-go"
+	"github.com/aichaos/scarecrow/src/listeners"
+	"github.com/aichaos/scarecrow/src/types"
+	"github.com/aichaos/scarecrow/src/web"
 	"os"
 	"regexp"
 	"strings"
 	"sync"
 	"time"
-	rivescript "github.com/aichaos/rivescript-go"
-	"github.com/aichaos/scarecrow/src/listeners"
-	"github.com/aichaos/scarecrow/src/types"
-	"github.com/aichaos/scarecrow/src/web"
 )
 
 const (
@@ -18,7 +18,7 @@ const (
 )
 
 var (
-	RE_OP = regexp.MustCompile(`^!op ([A-Za-z0-9\.@\-_]+?)$`)
+	RE_OP   = regexp.MustCompile(`^!op ([A-Za-z0-9\.@\-_]+?)$`)
 	RE_DEOP = regexp.MustCompile(`^!deop ([A-Za-z0-9\.@\-_]+?)$`)
 )
 
@@ -29,12 +29,12 @@ type Scarecrow struct {
 
 	// Internal structures.
 	AdminsConfig types.AdminsConfig
-	BotsConfig types.BotsConfig
-	WebConfig types.WebConfig
-	Brain      *rivescript.RiveScript
+	BotsConfig   types.BotsConfig
+	WebConfig    types.WebConfig
+	Brain        *rivescript.RiveScript
 
 	// Listeners.
-	Listeners map[string]listeners.Listener
+	Listeners     map[string]listeners.Listener
 	ListenersLock sync.RWMutex
 }
 
@@ -203,7 +203,7 @@ func (self *Scarecrow) OnMessage(req *types.ReplyRequest, res chan types.Communi
 	res <- types.CommunicationChannel{
 		Data: &types.ReplyAnswer{
 			Username: req.Username,
-			Message: reply,
+			Message:  reply,
 		},
 	}
 }

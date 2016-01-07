@@ -21,9 +21,9 @@ type BrainConfig struct {
 }
 
 type ListenerConfig struct {
-	Id       string `json:"id"`
-	Type     string `json:"type"`
-	Enabled  bool   `json:"enabled"`
+	Id       string            `json:"id"`
+	Type     string            `json:"type"`
+	Enabled  bool              `json:"enabled"`
 	Settings map[string]string `json:"settings"`
 }
 

@@ -3,10 +3,10 @@ package xmpp
 import (
 	"crypto/tls"
 	"fmt"
-	"strings"
-	xmppclient "github.com/mattn/go-xmpp"
 	"github.com/aichaos/scarecrow/src/listeners"
 	"github.com/aichaos/scarecrow/src/types"
+	xmppclient "github.com/mattn/go-xmpp"
+	"strings"
 )
 
 type XMPPListener struct {
@@ -15,7 +15,7 @@ type XMPPListener struct {
 	answerChannel  chan types.CommunicationChannel
 
 	// Configuration values for the XMPP listener.
-	id string
+	id       string
 	username string
 	port     string
 	password string
@@ -33,7 +33,7 @@ func init() {
 // New creates a new Slack Listener.
 func (self XMPPListener) New(config types.ListenerConfig, request, answer chan types.CommunicationChannel) listeners.Listener {
 	listener := XMPPListener{
-		id: config.Id,
+		id:             config.Id,
 		requestChannel: request,
 		answerChannel:  answer,
 
@@ -53,19 +53,19 @@ func (self XMPPListener) New(config types.ListenerConfig, request, answer chan t
 	if tlsNoVerify {
 		fmt.Printf("Skip TLS verify\n")
 		xmppclient.DefaultConfig = tls.Config{
-			ServerName: listener.server,
+			ServerName:         listener.server,
 			InsecureSkipVerify: true,
 		}
 	}
 
 	listener.options = xmppclient.Options{
-		Host:          fmt.Sprintf("%s:%s", listener.server, listener.port),
-		User:          listener.username,
-		Password:      listener.password,
-		Debug:         debug,
-		Session:       true, // Use server session
-		NoTLS:         tlsDisable,
-		StartTLS:      startTLS,
+		Host:     fmt.Sprintf("%s:%s", listener.server, listener.port),
+		User:     listener.username,
+		Password: listener.password,
+		Debug:    debug,
+		Session:  true, // Use server session
+		NoTLS:    tlsDisable,
+		StartTLS: startTLS,
 		// Status:        "xa",
 		// StatusMessage: "test status",
 	}
@@ -120,7 +120,7 @@ func (self *XMPPListener) XMPPLoop() {
 // AnswerLoop waits for chatbot replies to send out to the users.
 func (self *XMPPListener) AnswerLoop() {
 	for {
-		answer := <- self.answerChannel
+		answer := <-self.answerChannel
 		switch ev := answer.Data.(type) {
 		case *types.ReplyAnswer:
 			self.SendMessage(ev.Username, ev.Message)
@@ -143,10 +143,10 @@ func (self *XMPPListener) OnMessage(v xmppclient.Chat) {
 	if len(message) > 0 {
 		request := types.CommunicationChannel{
 			Data: &types.ReplyRequest{
-				Listener: "XMPP",
+				Listener:    "XMPP",
 				BotUsername: self.username,
-				Username: username,
-				Message: message,
+				Username:    username,
+				Message:     message,
 			},
 		}
 		self.requestChannel <- request
@@ -173,7 +173,7 @@ func (self *XMPPListener) OnPresence(v xmppclient.Presence) {
 func (self *XMPPListener) SendMessage(username string, message string) {
 	self.client.Send(xmppclient.Chat{
 		Remote: username,
-		Type: "chat",
-		Text: message,
+		Type:   "chat",
+		Text:   message,
 	})
 }

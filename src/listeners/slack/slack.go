@@ -2,11 +2,11 @@ package slack
 
 import (
 	"fmt"
-	"regexp"
-	"strings"
-	slackclient "github.com/nlopes/slack"
 	"github.com/aichaos/scarecrow/src/listeners"
 	"github.com/aichaos/scarecrow/src/types"
+	slackclient "github.com/nlopes/slack"
+	"regexp"
+	"strings"
 )
 
 type SlackListener struct {
@@ -15,10 +15,10 @@ type SlackListener struct {
 	answerChannel  chan types.CommunicationChannel
 
 	// Configuration values for the Slack listener.
-	id string
+	id          string
 	apiToken    string
 	botUsername string
-	team string
+	team        string
 
 	// Internal data.
 	api            *slackclient.Client
@@ -40,13 +40,13 @@ func init() {
 // New creates a new Slack Listener.
 func (self SlackListener) New(config types.ListenerConfig, request, answer chan types.CommunicationChannel) listeners.Listener {
 	listener := SlackListener{
-		id: config.Id,
+		id:             config.Id,
 		requestChannel: request,
 		answerChannel:  answer,
 
 		apiToken:    config.Settings["api_token"],
 		botUsername: config.Settings["username"],
-		team: config.Settings["team"],
+		team:        config.Settings["team"],
 	}
 
 	listener.api = slackclient.New(listener.apiToken)
@@ -157,12 +157,11 @@ func (self *SlackListener) OnMessage(ev *slackclient.MessageEvent) {
 		}
 	}
 
-
 	// Store the user ID->channel ID map.
 	self.userChannelMap[userId] = channelId
 
-	willAnswer := false  // Are we going to answer this message?
-	groupChat := false   // Is this a group chat message?
+	willAnswer := false // Are we going to answer this message?
+	groupChat := false  // Is this a group chat message?
 
 	// Was this a public channel message or a direct message?
 	if channelId[0] == 'D' {
@@ -185,11 +184,11 @@ func (self *SlackListener) OnMessage(ev *slackclient.MessageEvent) {
 	if willAnswer {
 		request := types.CommunicationChannel{
 			Data: &types.ReplyRequest{
-				Listener: "Slack",
-				GroupChat: groupChat,
+				Listener:    "Slack",
+				GroupChat:   groupChat,
 				BotUsername: self.botUsername,
-				Username: userName,
-				Message: text,
+				Username:    userName,
+				Message:     text,
 			},
 		}
 		self.requestChannel <- request

@@ -6,11 +6,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 	scarecrow "github.com/aichaos/scarecrow/src"
 	_ "github.com/aichaos/scarecrow/src/listeners/console"
 	_ "github.com/aichaos/scarecrow/src/listeners/slack"
 	_ "github.com/aichaos/scarecrow/src/listeners/xmpp"
+	"os"
 )
 
 func main() {

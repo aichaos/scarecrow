@@ -6,9 +6,9 @@ package listeners
 
 import (
 	"errors"
+	"github.com/aichaos/scarecrow/src/types"
 	"sort"
 	"sync"
-	"github.com/aichaos/scarecrow/src/types"
 )
 
 // Type Listener is an interface for front-end listeners for Scarecrow.
@@ -20,7 +20,7 @@ type Listener interface {
 
 var (
 	listenersMu sync.RWMutex
-	listeners = make(map[string]Listener)
+	listeners   = make(map[string]Listener)
 )
 
 // Register registers a listener handler.

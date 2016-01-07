@@ -25,7 +25,7 @@ type ReplyAnswer struct {
 }
 
 // Stop is a request for a listener to shut down.
-type Stop struct {}
+type Stop struct{}
 
 // Stopped is a message from a listener communicating that it has been stopped.
 type Stopped struct {
