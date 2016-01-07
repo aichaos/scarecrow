@@ -1,3 +1,6 @@
+init:
+	go get ./...
+
 run:
 	go run cmd/scarecrow/main.go
 
@@ -6,6 +9,3 @@ build:
 
 format:
 	gofmt -w .
-
-save-deps:
-	godep save -r ./ ./listeners/console ./listeners/slack ./listeners/xmpp
