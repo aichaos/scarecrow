@@ -5,8 +5,8 @@ package web
 
 import (
 	"fmt"
-	"net/http"
 	"html/template"
+	"net/http"
 	"os"
 )
 

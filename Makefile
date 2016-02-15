@@ -17,12 +17,12 @@ debug: gopath
 
 # `make fmt` runs gofmt
 fmt:
-	gofmt -w .
+	gofmt -w src
 
 # `make build` to build the binary
 build:
 	GOPATH=$(GOPATH) GO15VENDOREXPERIMENT=1 \
-		go build -x -o bin/scarecrow cmd/scarecrow/main.go
+		go build -i -o scarecrow cmd/scarecrow/main.go
 
 # Sets up the gopath / build environment
 gopath:

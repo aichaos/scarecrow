@@ -30,9 +30,15 @@ remembers information about the people it chats with, keeps log files, etc.
 
 # Install and Build
 
-Build it with `make build`
+The installation and build steps are handled by the GNU Makefile. Useful
+make commands:
 
-Run it with `./scarecrow-cli`
+* `make setup` - Sets up your build environment (git submodules, etc.)
+* `make build` - Builds the program and puts the binary at `./scarecrow`
+* `make run` - Runs the main program (from `cmd/scarecrow/main.go`) but doesn't
+  save its binary to disk.
+* `make debug` - Like `make run` but appends the `--debug` command line option.
+* `make fmt` - Runs `gofmt` to format all the Go code.
 
 Command line options are pretty basic: `--debug` for debug mode and
 `--version` to get the version number.
@@ -46,7 +52,7 @@ directory.
 
 ```
 Scarecrow - A RiveScript Chatbot written in Go
-Copyright (C) 2015  Noah Petherbridge
+Copyright (C) 2016  Noah Petherbridge
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

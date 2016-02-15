@@ -2,9 +2,9 @@ package web
 
 import (
 	"fmt"
-	"net/http"
 	"github.com/aichaos/scarecrow/src/models"
 	"github.com/gorilla/mux"
+	"net/http"
 )
 
 func (g *appContext) StatusHandler(w http.ResponseWriter, r *http.Request) {

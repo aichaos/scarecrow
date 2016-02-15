@@ -4,8 +4,8 @@ Package models defines database models for Scarecrow.
 package models
 
 import (
-	"time"
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 type Test struct {

@@ -2,11 +2,11 @@ package web
 
 import (
 	"fmt"
-	"net/http"
-	"github.com/aichaos/scarecrow/src/types"
 	"github.com/aichaos/scarecrow/src/models"
+	"github.com/aichaos/scarecrow/src/types"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
+	"net/http"
 )
 
 type appContext struct {

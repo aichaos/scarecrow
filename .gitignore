@@ -1,8 +1,9 @@
 /.gopath
-/bin
 /config/admins.json
 /config/bots.json
+/dist
 /logs
 /users
 /replies/aiden
+/scarecrow
 /src/vendor
