@@ -1,0 +1,33 @@
+[submodule "vendor/github.com/aichaos/rivescript-go"]
+	path = vendor/github.com/aichaos/rivescript-go
+	url = https://github.com/aichaos/rivescript-go
+[submodule "vendor/github.com/gorilla/mux"]
+	path = vendor/github.com/gorilla/mux
+	url = https://github.com/gorilla/mux
+[submodule "vendor/github.com/gorilla/context"]
+	path = vendor/github.com/gorilla/context
+	url = https://github.com/gorilla/context
+[submodule "vendor/github.com/jinzhu/gorm"]
+	path = vendor/github.com/jinzhu/gorm
+	url = https://github.com/jinzhu/gorm
+[submodule "vendor/github.com/jprichardson/readline-go"]
+	path = vendor/github.com/jprichardson/readline-go
+	url = https://github.com/jprichardson/readline-go
+[submodule "vendor/github.com/jinzhu/inflection"]
+	path = vendor/github.com/jinzhu/inflection
+	url = https://github.com/jinzhu/inflection
+[submodule "vendor/github.com/mattn/go-sqlite3"]
+	path = vendor/github.com/mattn/go-sqlite3
+	url = https://github.com/mattn/go-sqlite3
+[submodule "vendor/github.com/mattn/go-xmpp"]
+	path = vendor/github.com/mattn/go-xmpp
+	url = https://github.com/mattn/go-xmpp
+[submodule "vendor/github.com/nlopes/slack"]
+	path = vendor/github.com/nlopes/slack
+	url = https://github.com/nlopes/slack
+[submodule "vendor/golang.org/x/net"]
+	path = vendor/golang.org/x/net
+	url = https://github.com/golang/net
+[submodule "vendor/github.com/lib/pq"]
+	path = vendor/github.com/lib/pq
+	url = https://github.com/lib/pq

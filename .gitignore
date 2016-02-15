@@ -1,6 +1,8 @@
-/scarecrow-cli
+/.gopath
+/bin
 /config/admins.json
 /config/bots.json
 /logs
 /users
 /replies/aiden
+/src/vendor
