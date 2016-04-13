@@ -28,7 +28,17 @@ remembers information about the people it chats with, keeps log files, etc.
   multiple bots from one instance of the program.
 * Chat with the bot on the console, too
 
-# Install and Build
+# Usage
+
+Command line options are pretty basic: `--debug` for debug mode and
+`--version` to get the version number.
+
+# Build
+
+This section is broken into two steps: how to build the Go app, and how to build
+the front-end for the built-in HTTP server.
+
+## Go
 
 The installation and build steps are handled by the GNU Makefile. Useful
 make commands:
@@ -40,8 +50,22 @@ make commands:
 * `make debug` - Like `make run` but appends the `--debug` command line option.
 * `make fmt` - Runs `gofmt` to format all the Go code.
 
-Command line options are pretty basic: `--debug` for debug mode and
-`--version` to get the version number.
+## JavaScript
+
+To build the front-end, first install the dependencies via `npm`:
+
+```bash
+$ npm install -g webpack  # if you don't already have the `webpack` command
+$ npm install
+```
+
+Useful commands now are:
+
+* `webpack` - build the front-end sources in `http/src` and output them in
+  `http/public/bundle.js`
+* `webpack --watch` - the same, but it will monitor the files for changes and
+  automatically rebuild. Useful for active development.
+* `NODE_ENV=production webpack` - build them for production use
 
 # Documentation
 

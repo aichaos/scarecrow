@@ -5,21 +5,23 @@ package web
 
 import (
 	"fmt"
-	"html/template"
+	"text/template"
 	"net/http"
 	"os"
 )
 
-const DOCUMENT_ROOT string = "root"
+const DOCUMENT_ROOT string = "http/public"
 
 func (g *appContext) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	vars := struct {
-		Title string
+		Title       string
+		Initialized bool   // This is false until the DB has been initialized
 	}{
 		Title: "Hello world",
+		Initialized: false,
 	}
 
-	t, err := template.ParseFiles("root/index.html")
+	t, err := template.ParseFiles("http/public/index.html")
 	if err != nil {
 		panic("Error parsing index template!")
 	}

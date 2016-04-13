@@ -2,7 +2,9 @@
 /config/admins.json
 /config/bots.json
 /dist
+/http/public/static/js/scarecrow.js
 /logs
+/node_modules
 /users
 /replies/aiden
 /scarecrow
