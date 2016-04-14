@@ -26,7 +26,7 @@ func main() {
 
 	// Create the bot instance.
 	bot := scarecrow.New()
-	bot.Debug = *debug
+	bot.SetDebug(*debug)
 
 	bot.Start()
 }

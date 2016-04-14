@@ -31,3 +31,18 @@
 [submodule "vendor/github.com/lib/pq"]
 	path = vendor/github.com/lib/pq
 	url = https://github.com/lib/pq
+[submodule "vendor/github.com/mgutz/ansi"]
+	path = vendor/github.com/mgutz/ansi
+	url = https://github.com/mgutz/ansi
+[submodule "vendor/github.com/gin-gonic/gin"]
+	path = vendor/github.com/gin-gonic/gin
+	url = https://github.com/gin-gonic/gin
+[submodule "vendor/github.com/golang/protobuf"]
+	path = vendor/github.com/golang/protobuf
+	url = https://github.com/golang/protobuf
+[submodule "vendor/github.com/manucorporat/sse"]
+	path = vendor/github.com/manucorporat/sse
+	url = https://github.com/manucorporat/sse
+[submodule "vendor/gopkg.in/go-playground/validator.v8"]
+	path = vendor/gopkg.in/go-playground/validator.v8
+	url = https://github.com/go-playground/validator

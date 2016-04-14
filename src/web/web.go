@@ -2,31 +2,25 @@ package web
 
 import (
 	"fmt"
-	"github.com/aichaos/scarecrow/src/models"
 	"github.com/aichaos/scarecrow/src/types"
-	"github.com/jinzhu/gorm"
-	_ "github.com/mattn/go-sqlite3"
-	"net/http"
+	"github.com/gin-gonic/gin"
 )
 
 type appContext struct {
-	db *gorm.DB
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello world!")
+	// db *gorm.DB
 }
 
 func StartServer(config types.WebConfig) {
-	// TODO: make configurable, etc.
-	db, err := gorm.Open("sqlite3", "temp.sqlite")
-	if err != nil {
-		panic("Can't connect to DB")
-	}
+	r := gin.Default()
 
-	db.CreateTable(&models.Test{})
+	r.Static("/static", "./http/public/static")
 
-	g := &appContext{db: &db}
-	r := registerRoutes(g)
-	http.ListenAndServe(fmt.Sprintf("%s:%d", config.Host, config.Port), r)
+	r.GET("/v1/status", StatusHandler)
+	r.POST("/v1/admin/setup", AdminSetupHandler)
+
+	// The index and catch-all handlers go to the index.html page.
+	r.GET("/", IndexHandler)
+	r.NoRoute(IndexHandler)
+
+	r.Run(fmt.Sprintf("%s:%d", config.Host, config.Port))
 }

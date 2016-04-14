@@ -4,15 +4,15 @@ package web
 // files from the document root on disk.
 
 import (
-	"fmt"
+	"bytes"
 	"text/template"
-	"net/http"
-	"os"
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/render"
 )
 
 const DOCUMENT_ROOT string = "http/public"
 
-func (g *appContext) IndexHandler(w http.ResponseWriter, r *http.Request) {
+func IndexHandler(c *gin.Context) {
 	vars := struct {
 		Title       string
 		Initialized bool   // This is false until the DB has been initialized
@@ -25,18 +25,11 @@ func (g *appContext) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic("Error parsing index template!")
 	}
-	t.Execute(w, vars)
-}
 
-func (g *appContext) StaticHandler(w http.ResponseWriter, r *http.Request) {
-	uri := r.URL.Path
-
-	// File exists?
-	filePath := fmt.Sprintf("%s/%s", DOCUMENT_ROOT, uri)
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		w.Write([]byte("404 Not Found"))
-		return
-	}
-
-	http.ServeFile(w, r, filePath)
+	buf := new(bytes.Buffer)
+	t.Execute(buf, vars)
+	c.Render(200, render.Data{
+		ContentType: "text/html",
+		Data: buf.Bytes(),
+	})
 }

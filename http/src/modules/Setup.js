@@ -41,6 +41,7 @@ export default React.createClass({
 				url: "/v1/admin/setup",
 				dataType: "json",
 				contentType: "application/json; charset=utf-8",
+				data: this.state,
 				success: function(data) {
 					window.alert(data);
 				},

@@ -13,11 +13,6 @@ type Test struct {
 	Count int `sql:"DEFAULT:0"`
 }
 
-type AdminSetting struct {
-	// Whether users can register their own accounts
-	OpenRegistration bool `sql:"DEFAULT:false"`
-}
-
 type User struct {
 	ID          int
 	Username    string

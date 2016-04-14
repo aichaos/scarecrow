@@ -3,6 +3,8 @@ package scarecrow
 import (
 	"fmt"
 	rivescript "github.com/aichaos/rivescript-go"
+	"github.com/aichaos/scarecrow/src/db"
+	"github.com/aichaos/scarecrow/src/log"
 	"github.com/aichaos/scarecrow/src/listeners"
 	"github.com/aichaos/scarecrow/src/types"
 	"github.com/aichaos/scarecrow/src/web"
@@ -28,6 +30,8 @@ type Scarecrow struct {
 	Debug bool
 
 	// Internal structures.
+	DB           *db.DB
+	DBConfig     types.DBConfig
 	AdminsConfig types.AdminsConfig
 	BotsConfig   types.BotsConfig
 	WebConfig    types.WebConfig
@@ -38,6 +42,7 @@ type Scarecrow struct {
 	ListenersLock sync.RWMutex
 }
 
+// New creates the master instance of the Scarecrow bot.
 func New() *Scarecrow {
 	self := new(Scarecrow)
 	self.Listeners = map[string]listeners.Listener{}
@@ -45,12 +50,43 @@ func New() *Scarecrow {
 	return self
 }
 
+// SetDebug changes the debug mode setting.
+func (self *Scarecrow) SetDebug(debug bool) {
+	self.Debug = debug // TODO: do we use this?
+	if debug {
+		log.SetLevel(log.DEBUG)
+	}
+}
+
 // Start initializes and runs the bots.
 func (self *Scarecrow) Start() {
-	self.Info("Scarecrow version %s is starting...", VERSION)
+	log.Info("Scarecrow version %s is starting...", VERSION)
 	self.InitConfig()
 	self.InitBrain()
 	MakeDirectory("./users")
+
+	// Set up a database connection.
+	self.DB = db.New(self.DBConfig)
+
+	// Start the web server front-end.
+	go web.StartServer(self.WebConfig)
+	log.Info("Web server is listening at http://%s:%d/",
+		self.WebConfig.Host,
+		self.WebConfig.Port,
+	)
+
+	// Sign on all the active bots at startup.
+	self.StartAllBots()
+
+	self.Run()
+}
+
+// StartAllBots starts all active bot listeners.
+func (self *Scarecrow) StartAllBots() {
+	if !self.DB.Ready {
+		log.Debug("Not connecting the bots; database isn't ready.")
+		return
+	}
 
 	// Go through all the bots and activate them.
 	for _, listener := range self.BotsConfig.Listeners {
@@ -60,11 +96,11 @@ func (self *Scarecrow) Start() {
 		}
 
 		// Initialize the various listener types.
-		self.Info("Setting up %s listener...", listener.Type)
+		log.Info("Setting up %s listener...", listener.Type)
 
 		// Make sure its ID is unique.
 		if _, dupe := self.Listeners[listener.Id]; dupe {
-			self.Error("Duplicate listener ID '%s'; all listeners should have a unique ID!")
+			log.Error("Duplicate listener ID '%s'; all listeners should have a unique ID!")
 			os.Exit(1)
 		}
 
@@ -73,7 +109,7 @@ func (self *Scarecrow) Start() {
 
 		constructor, err := listeners.Create(listener.Type, listener, request, answer)
 		if err != nil {
-			self.Error("Unknown listener type: %s", listener.Type)
+			log.Error("Unknown listener type: %s", listener.Type)
 			continue
 		}
 
@@ -81,11 +117,6 @@ func (self *Scarecrow) Start() {
 		constructor.Start()
 		self.Listeners[listener.Id] = constructor
 	}
-
-	// Start the web server front-end.
-	go web.StartServer(self.WebConfig)
-
-	self.Run()
 }
 
 // Run enters the main loop.
@@ -98,7 +129,7 @@ func (self *Scarecrow) Run() {
 // Shutdown shuts down all the bots.
 func (self *Scarecrow) Shutdown() {
 	for id, bot := range self.Listeners {
-		self.Info("Send shutdown request to listener: %s", id)
+		log.Info("Send shutdown request to listener: %s", id)
 		channel := bot.InputChannel()
 		channel <- types.CommunicationChannel{
 			Data: &types.Stop{},
@@ -128,14 +159,14 @@ func (self *Scarecrow) ManageListener(request, answer chan types.CommunicationCh
 			case *types.Stopped:
 				self.OnStopped(ev)
 			default:
-				self.Error("Received an unknown event type from a listener: %v\n", ev)
+				log.Error("Received an unknown event type from a listener: %v\n", ev)
 			}
 		}
 	}
 }
 
 func (self *Scarecrow) OnMessage(req *types.ReplyRequest, res chan types.CommunicationChannel) {
-	self.Log("Got reply request from %s: %s", req.Username, req.Message)
+	log.Debug("Got reply request from %s: %s", req.Username, req.Message)
 	reply := ""
 
 	// Format the user's name to include the listener prefix, to
@@ -160,7 +191,7 @@ func (self *Scarecrow) OnMessage(req *types.ReplyRequest, res chan types.Communi
 				self.SaveAdminsConfig(self.AdminsConfig)
 				reply = fmt.Sprintf("%s added to the admins list.", opName)
 			} else {
-				self.Warn("Syntax error parsing command: %s", input)
+				log.Warn("Syntax error parsing command: %s", input)
 				reply = "Syntax error."
 			}
 		} else if strings.Index(input, "!deop") == 0 {
@@ -181,12 +212,12 @@ func (self *Scarecrow) OnMessage(req *types.ReplyRequest, res chan types.Communi
 
 				reply = fmt.Sprintf("%s removed from the admins list.", opName)
 			} else {
-				self.Warn("Syntax error parsing command: %s", input)
+				log.Warn("Syntax error parsing command: %s", input)
 				reply = "Syntax error."
 			}
 		} else if strings.Index(input, "!halt") == 0 {
 			// !halt -- Shut the bot down.
-			self.Info("Halt requested by admin user.")
+			log.Info("Halt requested by admin user.")
 			defer self.Shutdown()
 			reply = "Shutting down..."
 		}
@@ -216,13 +247,13 @@ func (self *Scarecrow) OnStopped(ev *types.Stopped) {
 	// Delete the listener from the stack.
 	delete(self.Listeners, ev.ListenerId)
 
-	self.Info("Listener %s has stopped. %d listeners still active.",
+	log.Info("Listener %s has stopped. %d listeners still active.",
 		ev.ListenerId,
 		len(self.Listeners))
 
 	// No remaining listeners?
 	if len(self.Listeners) == 0 {
-		self.Info("All listeners have stopped. Exiting the program...")
+		log.Info("All listeners have stopped. Exiting the program...")
 		os.Exit(0)
 	}
 }

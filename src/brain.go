@@ -3,6 +3,7 @@ package scarecrow
 import (
 	"fmt"
 	rivescript "github.com/aichaos/rivescript-go"
+	"github.com/aichaos/scarecrow/src/log"
 	"os"
 	"regexp"
 	"strings"
@@ -83,12 +84,12 @@ func (self *Scarecrow) LogTransaction(username, message, bot, reply string) {
 
 	fh, err := os.OpenFile(logFile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
-		self.Error("Couldn't write log file: %s", err)
+		log.Error("Couldn't write log file: %s", err)
 		return
 	}
 	defer fh.Close()
 
 	if _, err = fh.WriteString(payload); err != nil {
-		self.Error("Couldn't write log file: %s", err)
+		log.Error("Couldn't write log file: %s", err)
 	}
 }
