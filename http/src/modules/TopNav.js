@@ -1,30 +1,48 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
+
+import { POST } from "../utils/ajax"
 
 export default React.createClass({
+	handleLogout(e) {
+		e.preventDefault();
+
+		POST("/v1/admin/deauth", "{}", function(data) {
+			serverSettings.loggedIn = false;
+			browserHistory.push("/login");
+		}, function(errMsg) {
+			window.alert(errMsg);
+		});
+	},
+
 	render() {
-		return (
-			<nav className="navbar navbar-inverse navbar-fixed-top">
-				<div className="container-fluid">
-					<div className="navbar-header">
-						<button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-							<span className="sr-only">Toggle navigation</span>
-							<span className="icon-bar"></span>
-							<span className="icon-bar"></span>
-							<span className="icon-bar"></span>
-						</button>
-						<Link to="/" className="navbar-brand">Scarecrow</Link>
-					</div>
-					<div id="navbar" className="navbar-collapse collapse">
-						<ul className="nav navbar-nav navbar-right">
-							<li><Link to="/">Dashboard</Link></li>
-							<li><Link to="/setup">Setup</Link></li>
-							<li><Link to="/settings">Settings</Link></li>
-							<li><Link to="/help">Help</Link></li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-		);
+		if (serverSettings.loggedIn === true) {
+			return (
+				<ul className="nav navbar-nav navbar-right">
+					<li><Link to="/">Dashboard</Link></li>
+					<li><Link to="/setup">Setup</Link></li>
+					<li><Link to="/settings">Settings</Link></li>
+					<li><a href="#" onClick={this.handleLogout}>Log Out</a></li>
+					<li><Link to="/help">Help</Link></li>
+					<li></li>
+				</ul>
+			);
+		}
+		else if (serverSettings.initialized === false) {
+			return (
+				<ul className="nav navbar-nav navbar-right">
+					<li><Link to="/setup">Setup</Link></li>
+					<li><Link to="/help">Help</Link></li>
+				</ul>
+			);
+		}
+		else {
+			return (
+				<ul className="nav navbar-nav navbar-right">
+					<li><Link to="/login">Log In</Link></li>
+					<li><Link to="/help">Help</Link></li>
+				</ul>
+			);
+		}
 	}
 });

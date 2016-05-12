@@ -5,35 +5,14 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
-	"time"
 )
 
-type Test struct {
-	gorm.Model
-	Count int `sql:"DEFAULT:0"`
-}
-
-type User struct {
-	ID          int
-	Username    string
-	Password    string
-	Role        string `sql:"size:10;default:'user'"`
-	AccessToken string // Personal API access token
-	Created     time.Time
-	Updated     time.Time
-
-	Bots []Bot
-}
-
-type Bot struct {
-	ID        string
-	UserID    int
-	Name      string
-	BrainType string `sql:"DEFAULT:'RiveScript'"`
-	Base      string // Refers to a Bot.ID
-	IsBase    bool   `sql:"DEFAULT:false"`
-
-	Listeners []Listener
+type AppConfig struct {
+	Initialized bool   `gorm:"primary_key"`
+	Username    string // Admin username
+	Password    string // Admin password
+	Name        string // Bot name
+	Replies     string // RiveScript reply root
 }
 
 type Listener struct {
@@ -48,4 +27,16 @@ type ListenerSetting struct {
 	ListenerID int
 	Key        string
 	Value      string
+}
+
+type User struct {
+	ID   string
+	Data []UserData
+}
+
+type UserData struct {
+	gorm.Model
+	UserID string
+	Key    string
+	Value  string
 }

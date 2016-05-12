@@ -1,5 +1,7 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
+
+import { POST } from "../utils/ajax";
 
 // Default placeholder DB strings.
 const DB_STRINGS = {
@@ -36,19 +38,13 @@ export default React.createClass({
 			window.alert("The admin passwords do not match.");
 		}
 		else {
-			$.ajax({
-				type: "POST",
-				url: "/v1/admin/setup",
-				dataType: "json",
-				contentType: "application/json; charset=utf-8",
-				data: this.state,
-				success: function(data) {
-					window.alert(data);
-				},
-				failure: function(errMsg) {
-					window.alert(errMsg);
-				}
-			})
+			POST("/v1/admin/setup", this.state, function(data) {
+				serverSettings.initialized = true;
+				serverSettings.loggedIn = true;
+				browserHistory.push("/");
+			}, function(errMsg) {
+				window.alert(errMsg);
+			});
 		}
 	},
 

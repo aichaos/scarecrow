@@ -6,6 +6,6 @@ package types
 ////////////////////////////////////////////////////////////////////////////////
 
 type DBConfig struct {
-	Type string       `json:"dbType"`
+	Type       string `json:"dbType"`
 	ConnString string `json:"connString"`
 }

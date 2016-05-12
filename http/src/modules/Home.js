@@ -7,6 +7,9 @@ export default React.createClass({
 		if (serverSettings.initialized === false) {
 			browserHistory.push("/setup");
 		}
+		else if (serverSettings.loggedIn === false) {
+			browserHistory.push("/login");
+		}
 
 		return null;
 	},

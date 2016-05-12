@@ -13,6 +13,7 @@ const (
 	WARN
 	ERROR
 )
+
 var logLevel int
 
 func init() {
@@ -39,9 +40,9 @@ func SetLevel(level int) {
 func formatLogLine(color, level, message string, a ...interface{}) {
 	bright := fmt.Sprintf("%s+h", color)
 	fmt.Printf(
-		ansi.Color(fmt.Sprintf("[%s] ", level), bright) +
-		ansi.Color(message, color) + "\n",
-		a...
+		ansi.Color(fmt.Sprintf("[%s] ", level), bright)+
+			ansi.Color(message, color)+"\n",
+		a...,
 	)
 }
 

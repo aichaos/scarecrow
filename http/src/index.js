@@ -6,6 +6,7 @@ import { Router, Route, browserHistory, IndexRoute } from "react-router"
 import App from "./modules/App"
 import Home from "./modules/Home"
 import Setup from "./modules/Setup"
+import Login from "./modules/Login"
 
 render((
 	<Router history={browserHistory}>
@@ -13,6 +14,7 @@ render((
 			<IndexRoute component={Home}/>
 
 			<Route path="/setup" component={Setup}/>
+			<Route path="/login" component={Login}/>
 		</Route>
 	</Router>
 ), document.getElementById("app"));

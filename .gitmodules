@@ -46,3 +46,21 @@
 [submodule "vendor/gopkg.in/go-playground/validator.v8"]
 	path = vendor/gopkg.in/go-playground/validator.v8
 	url = https://github.com/go-playground/validator
+[submodule "vendor/golang.org/x/crypto"]
+	path = vendor/golang.org/x/crypto
+	url = https://github.com/golang/crypto
+[submodule "vendor/github.com/gin-gonic/contrib"]
+	path = vendor/github.com/gin-gonic/contrib
+	url = https://github.com/gin-gonic/contrib
+[submodule "vendor/github.com/boj/redistore"]
+	path = vendor/github.com/boj/redistore
+	url = https://github.com/boj/redistore
+[submodule "vendor/github.com/gorilla/sessions"]
+	path = vendor/github.com/gorilla/sessions
+	url = https://github.com/gorilla/sessions
+[submodule "vendor/github.com/garyburd/redigo"]
+	path = vendor/github.com/garyburd/redigo
+	url = https://github.com/garyburd/redigo
+[submodule "vendor/github.com/gorilla/securecookie"]
+	path = vendor/github.com/gorilla/securecookie
+	url = https://github.com/gorilla/securecookie

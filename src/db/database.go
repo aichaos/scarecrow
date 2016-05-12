@@ -3,12 +3,12 @@ package db
 
 import (
 	"encoding/json"
-	"os"
 	"github.com/aichaos/scarecrow/src/log"
 	"github.com/aichaos/scarecrow/src/models"
 	"github.com/aichaos/scarecrow/src/types"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
+	"os"
 )
 
 type DB struct {
@@ -27,7 +27,7 @@ func New(conf types.DBConfig) *DB {
 
 	db := new(DB)
 	db.Config = conf
-	db.Ready  = false
+	db.Ready = false
 
 	// If we have valid configuration, attempt to connect.
 	if len(conf.Type) > 0 && len(conf.ConnString) > 0 {
@@ -54,7 +54,7 @@ func (self *DB) Connect() (bool, error) {
 	}
 
 	self.Driver = db
-	self.Ready  = true
+	self.Ready = true
 
 	self.CreateTables()
 
@@ -63,10 +63,11 @@ func (self *DB) Connect() (bool, error) {
 
 // CreateTables makes sure all the database tables exist.
 func (self *DB) CreateTables() {
-	self.Driver.CreateTable(&models.User{})
-	self.Driver.CreateTable(&models.Bot{})
+	self.Driver.CreateTable(&models.AppConfig{})
 	self.Driver.CreateTable(&models.Listener{})
 	self.Driver.CreateTable(&models.ListenerSetting{})
+	self.Driver.CreateTable(&models.User{})
+	self.Driver.CreateTable(&models.UserData{})
 }
 
 // LoadConfig loads the config/db.json config file.

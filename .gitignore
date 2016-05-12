@@ -1,6 +1,8 @@
 /.gopath
 /config/admins.json
 /config/bots.json
+/config/db.json
+/config/sessions.json
 /dist
 /http/public/static/js/scarecrow.js
 /logs
