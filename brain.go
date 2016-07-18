@@ -3,6 +3,7 @@ package scarecrow
 import (
 	"fmt"
 	rivescript "github.com/aichaos/rivescript-go"
+	"github.com/aichaos/rivescript-go/lang/rivescript_js"
 	"os"
 	"regexp"
 	"strings"
@@ -14,6 +15,8 @@ var re_nasties = regexp.MustCompile(`[^A-Za-z0-9_\-@\. ]`)
 // InitBrain loads the RiveScript brain.
 func (self *Scarecrow) InitBrain() {
 	self.Brain = rivescript.New()
+	jsHandler := rivescript_js.New(self.Brain)
+	self.Brain.SetHandler("javascript", jsHandler)
 	self.Brain.LoadDirectory(self.BotsConfig.Personality.Brain.Replies)
 	self.Brain.SortReplies()
 }
